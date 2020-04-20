@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/200406-java-react-usf/korey_keipe_p0/issues"
   },
-  "homepage": "https://github.com/200406-java-react-usf/korey_keipe_p0#readme"
+  "homepage": "https://github.com/200406-java-react-usf/korey_keipe_p0#readme",
+  "devDependencies": {
+    "jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
