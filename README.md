@@ -19,3 +19,10 @@ Tech Stack:
 
 Presentation:
  5 minute live demonstration of endpoint consumption using Postman
+
+My Project 0 - Chatbot API
+
+	Data to persist in Db
+	 - Users
+	 - Commands
+	 - Responses
