@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/200406-java-react-usf/korey_keipe_p0#readme",
   "devDependencies": {
-    "@types/node": "^13.13.1",
+    "@types/node": "^12.12.37",
     "jest": "^25.4.0",
     "typescript": "^3.8.3"
   },
