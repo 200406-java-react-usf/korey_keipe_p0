@@ -2,7 +2,7 @@
   "name": "korey_keipe_p0",
   "version": "1.0.0",
   "description": "ChatBot API - Project 0",
-  "main": "index.js",
+  "main": "./build/app.js",
   "scripts": {
     "test": "jest"
   },
