@@ -12,4 +12,32 @@ export class UserRepository implements CrudRepository<User> {
         });
     };
 
+    getById(id: number): Promise<User>{
+
+        return new Promise((resolve, reject) => {
+            
+        });
+    };
+
+    save(newUser: User): Promise<User>{
+
+        return new Promise((resolve, reject) => {
+            
+        });
+    };
+
+    update(updateUser: User): Promise<boolean>{
+
+        return new Promise((resolve, reject) => {
+            
+        });
+    };
+
+    deleteById(id: number): Promise<boolean>{
+
+        return new Promise((resolve, reject) => {
+            
+        });
+    };
+
 }
