@@ -1,4 +1,4 @@
-const response = require('../models/user');
+const response = require('../models/response');
 id = 0;
 
 module.exports = responseData = [
