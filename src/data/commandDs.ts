@@ -3,6 +3,6 @@ let id: number = 0;
 
 export default [
 
-    new Command(id++, 'test'),
+	new Command(id++, 'test'),
 
-]
+];
