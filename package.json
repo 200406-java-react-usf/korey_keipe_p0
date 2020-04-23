@@ -19,6 +19,9 @@
   "homepage": "https://github.com/200406-java-react-usf/korey_keipe_p0#readme",
   "devDependencies": {
     "@types/node": "^12.12.37",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^6.8.0",
     "jest": "^25.4.0",
     "ts-node": "^8.9.0",
     "typescript": "^3.8.3"
