@@ -40,3 +40,10 @@ class DataNotStoredError extends AppError{
         super.setMessage('Error: The data has not been stored')
     }
 }
+
+export {
+    DataNotFoundError,
+    DataNotStoredError,
+    AuthenticationError,
+    InvalidRequestError
+}

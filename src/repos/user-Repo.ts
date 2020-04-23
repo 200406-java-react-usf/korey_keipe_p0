@@ -1,6 +1,12 @@
 import data from '../data/userDs';
 import { CrudRepository } from './crud-repo';
 import { User } from '../models/user';
+import { 
+    DataNotFoundError,
+    InvalidRequestError,
+    DataNotStoredError,
+    AuthenticationError
+} from '../errors/errors';
 
 
 export class UserRepository implements CrudRepository<User> {
@@ -12,9 +18,13 @@ export class UserRepository implements CrudRepository<User> {
             setTimeout(() => {
                 
                 let users: Array<User> = [];
-
-                for(let user of data){
+                let user: User;
+                for(user of data){
                     users.push({...user});
+                }
+
+                if (users.length == 0){
+                   reject(new DataNotFoundError('Database is Empty'));
                 }
 
                 resolve(users)
