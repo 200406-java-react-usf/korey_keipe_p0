@@ -8,13 +8,13 @@ export class UserRepository implements CrudRepository<User> {
     getAll(): Promise<User[]> {
 
         return new Promise((resolve, reject) => {
-        
-            let users: Array<User> = [];
 
             setTimeout(() => {
                 
+                let users: Array<User> = [];
+
                 for(let user of data){
-                    users.push(user)
+                    users.push({...user});
                 }
 
                 resolve(users)
@@ -24,6 +24,13 @@ export class UserRepository implements CrudRepository<User> {
     };
 
     getById(id: number): Promise<User>{
+
+        return new Promise((resolve, reject) => {
+            
+        });
+    };
+
+    getByUsername(username: string): Promise<User>{
 
         return new Promise((resolve, reject) => {
             
