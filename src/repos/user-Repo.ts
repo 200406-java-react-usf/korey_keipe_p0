@@ -43,7 +43,22 @@ export class UserRepository implements CrudRepository<User> {
     getByUsername(username: string): Promise<User>{
 
         return new Promise((resolve, reject) => {
-            
+
+            if(!username){
+                reject(new InvalidRequestError('Invalid username'));
+            }
+
+            setTimeout(() => {
+                
+                for (let user of data){
+                    if (username == user.username){
+                        resolve(user);      
+                    }
+                }
+
+                reject(new DataNotFoundError(`No user found with username: ${username}`))
+
+            }, 1000);
         });
     };
 
