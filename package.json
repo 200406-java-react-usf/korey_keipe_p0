@@ -4,6 +4,7 @@
   "description": "ChatBot API - Project 0",
   "main": "./build/app.js",
   "scripts": {
+    "start": "tsc && node ./build/app.js",
     "test": "jest"
   },
   "repository": {
