@@ -1,8 +1,22 @@
+import express from 'express';
+
 import { UserRepository } from './repos/user-Repo';
 
-let userRepo = new UserRepository();
-let userPromise = userRepo.getAll();
-//userPromise.then(console.log).catch(console.log);
+const app = express();
 
-let usernamePromise = userRepo.getByUsername('');
-usernamePromise.then(console.log).catch(console.log);
+const port = 8080;
+
+app.get('/', (req, res)=>{
+	res.send('This is running');
+});
+
+app.listen(port, ()=>{
+	console.log(`Server is now running on ${port}`);
+});
+
+
+
+
+
+
+
