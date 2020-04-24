@@ -4,8 +4,6 @@ import { User } from '../models/user';
 import { 
 	DataNotFoundError,
 	InvalidRequestError,
-	DataNotStoredError,
-	AuthenticationError
 } from '../errors/errors';
 
 
