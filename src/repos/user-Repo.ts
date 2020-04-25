@@ -31,11 +31,12 @@ export class UserRepository implements CrudRepository<User> {
 
 				if (users.length == 0){
 					reject(new DataNotFoundError('Database is Empty'));
+					return;
 				}
 
 				resolve(users);
 
-			}, 1000);
+			}, 250);
 		});
 	}
 
