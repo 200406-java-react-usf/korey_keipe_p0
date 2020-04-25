@@ -17,13 +17,13 @@ describe('User Repo',()=>{
 	test('should throw DataNotFoundError when invoking getAll and the data base is empty', async () => {
 
 		// Arrange
-		expect.assertions(0);
+		expect.assertions(1);
 		// Act
 		try{
 			await sut.getInstance().getAll();
 		} catch (e){
 		// Accert
-			expect(e).toThrow(DataNotFoundError);
+			expect(e instanceof DataNotFoundError).toBeTruthy();
 		}
 	});
 });
