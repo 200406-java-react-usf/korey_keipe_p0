@@ -30,7 +30,7 @@ export class UserRepository implements CrudRepository<User> {
 				}
 
 				if (users.length == 0){
-					reject(new DataNotFoundError('Database is Empty'));
+					reject(new DataNotFoundError('No users found in database'));
 					return;
 				}
 
