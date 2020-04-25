@@ -18,7 +18,24 @@ export class CommandRepository implements CrudRepository<Command> {
 
 	getAll(): Promise<Command[]>{
 		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
+
+			setTimeout(() => {
+			
+				let commands: Command[] = [];
+				let command: Command;
+
+				for(command of data){
+					commands.push({...command});
+				}
+
+				if(commands.length === 0){
+					reject(new DataNotFoundError('No commands found in database'));
+					return;
+				}
+
+				resolve(commands);
+				
+			}, 250);
 		});
 	}
 
