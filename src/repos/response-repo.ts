@@ -20,6 +20,10 @@ export class ResponseRepository implements CrudRepository<Response> {
 	getAll(): Promise<Response[]>{
 		return new Promise((resolve,reject)=>{
 
+			if(data.length === 0){
+				reject(new DataNotFoundError('No responses found in database'));
+				return;
+			}
 			setTimeout(() => {
 			
 				let responses: Response[] = [];
@@ -27,11 +31,6 @@ export class ResponseRepository implements CrudRepository<Response> {
 
 				for(response of data){
 					responses.push({...response});
-				}
-
-				if(responses.length === 0){
-					reject(new DataNotFoundError('No responses found in database'));
-					return;
 				}
 
 				resolve(responses);
