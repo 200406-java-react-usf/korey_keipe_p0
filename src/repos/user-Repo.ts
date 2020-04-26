@@ -8,6 +8,7 @@ import {
 import  validateId from '../util/validation';
 import  validateString from '../util/validation';
 import  validateObj from '../util/validation';
+import userDs from '../data/userDs';
 
 export class UserRepository implements CrudRepository<User> {
 
@@ -35,7 +36,7 @@ export class UserRepository implements CrudRepository<User> {
 					users.push({...user});
 				}
 
-				resolve(users);
+				resolve(users.map((users)=>this.passwordHide(users)));
 
 			}, 250);
 		});
@@ -57,7 +58,7 @@ export class UserRepository implements CrudRepository<User> {
 				return;
 			}
 			
-			resolve(user);
+			resolve(this.passwordHide(user));
 
 		});
 	}
@@ -105,7 +106,9 @@ export class UserRepository implements CrudRepository<User> {
 			
 		});
 	}
-	private passwordHide(){
-
+	private passwordHide(user: User){
+		let userCopy = {...user};
+		delete userCopy.password;
+		return userCopy;
 	}
 }
