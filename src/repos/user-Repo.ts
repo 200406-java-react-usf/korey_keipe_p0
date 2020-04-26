@@ -20,18 +20,17 @@ export class UserRepository implements CrudRepository<User> {
 	getAll(): Promise<User[]> {
 
 		return new Promise((resolve, reject) => {
-
+			
+			if(data.length === 0){
+				reject(new DataNotFoundError('No users found in database'));
+				return;
+			}
 			setTimeout(() => {
 				
 				let users: Array<User> = [];
 				let user: User;
 				for(user of data){
 					users.push({...user});
-				}
-
-				if (users.length == 0){
-					reject(new DataNotFoundError('No users found in database'));
-					return;
 				}
 
 				resolve(users);
@@ -65,7 +64,7 @@ export class UserRepository implements CrudRepository<User> {
 
 				reject(new DataNotFoundError(`No user found with username: ${username}`));
 
-			}, 1000);
+			}, 500);
 		});
 	}
 
