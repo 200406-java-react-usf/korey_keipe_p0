@@ -15,10 +15,10 @@ UserRouter.get('/', async (req, res) => {
 	}
 });
 
-UserRouter.get('/:username', async (req,res)=>{
-	const un = req.params.username;
+UserRouter.get('/:id', async (req,res)=>{
+	const id = +req.params.id;
 	try{
-		let payload = await userRepo.getByUsername(un);	
+		let payload = await userRepo.getById(id);	
 		return res.status(200).json(payload);
 	}catch(e){
 		return res.status(404).json(e);
