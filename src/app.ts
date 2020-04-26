@@ -2,6 +2,8 @@ import express from 'express';
 import { UserRepository } from './repos/user-Repo';
 import { CommandRepository } from './repos/command-repo';
 import { ResponseRepository } from './repos/response-repo';
+import { UserRouter } from './routes/user-router';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 8080;
@@ -10,10 +12,9 @@ let userRepo = UserRepository.getInstance();
 let commandRepo = CommandRepository.getInstance();
 let responseRepo = ResponseRepository.getInstance();
 
-app.get('/users', async (req, res)=>{
-	let payload = await userRepo.getAll();	
-	res.status(200).send(payload);
-});
+app.use('/', bodyParser.json());
+
+app.use('/users', UserRouter);
 
 app.get('/commands', async (req, res)=>{
 	let payload = await commandRepo.getAll();	
