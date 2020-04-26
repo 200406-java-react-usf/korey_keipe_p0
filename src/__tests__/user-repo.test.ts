@@ -17,18 +17,18 @@ describe('User Repo',()=>{
 
 	});
 
-	test('should throw DataNotFoundError when invoking getAll() and the data base is empty', async () => {
+	// test('should throw DataNotFoundError when invoking getAll() and the data base is empty', async () => {
 
-		// Arrange
-		expect.assertions(1);
-		// Act
-		try{
-			await sut.getInstance().getAll();
-		} catch (e){
-		// Accert
-			expect(e instanceof DataNotFoundError).toBeTruthy();
-		}
-	});
+	// 	// Arrange
+	// 	expect.assertions(1);
+	// 	// Act
+	// 	try{
+	// 		await sut.getInstance().getAll();
+	// 	} catch (e){
+	// 	// Accert
+	// 		expect(e instanceof DataNotFoundError).toBeTruthy();
+	// 	}
+	// });
 
 	test('should return a truthy user when getById() is provide a specific user ID', async () => {
 		// Arrange
@@ -53,7 +53,7 @@ describe('User Repo',()=>{
 		}
 	});
 
-	test('should return thruthy user when getByUsername() is provide a specific username',async ()=>{
+	test('should return thruthy user when getByUsername() is provide a specific username', async ()=>{
 		// Arrange
 		expect.assertions(3);
 		// Act
@@ -77,17 +77,18 @@ describe('User Repo',()=>{
 		
 	});
 
-	test('should return true when save() is provide with a valid User',async()=>{
+	test('should return newUser when save() is provide with a valid User', async ()=>{
 		// Arrange
 		expect.assertions(2);
+		let newUser = new User(0, 'NewUser', 'password', 'New@user.com');
 		// Act
-		let result = await sut.getInstance().save(new User(0, 'NewUser', 'password', 'New@user.com'));
+		let result = await sut.getInstance().save(newUser);
 		// Assert
 		expect(result).toBeTruthy();
-		expect(result.id).toBe(data.length);
+		expect(result.id).toEqual(data.length);
 	});
 
-	test('should throw DataNotStoredError when save() is provide an invalid User ',async()=>{
+	test('should throw InvalidRequestError when save() is provide an invalid User ',async()=>{
 		// Arrange
 		expect.assertions(1);
 
@@ -96,7 +97,7 @@ describe('User Repo',()=>{
 			await sut.getInstance().save(new User(null,'','password',''));
 		}catch(e){
 		// Assert
-			expect(e instanceof DataNotStoredError).toBeTruthy();
+			expect(e instanceof InvalidRequestError).toBeTruthy();
 		}
 	});
 
