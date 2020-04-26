@@ -75,7 +75,7 @@ export class UserRepository implements CrudRepository<User> {
 				
 				for (let user of data){
 					if (username == user.username){
-						resolve(user);      
+						resolve(this.passwordHide(user));      
 					}
 				}
 
