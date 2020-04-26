@@ -13,3 +13,13 @@ CommandRouter.get('/', async (req, res) => {
 		return res.status(404).json(e);
 	}
 });
+
+CommandRouter.get('/:id', async (req, res) => {
+	const id = +req.params.id;
+	try{
+		let result = await commandRepo.getById(id);
+		return res.status(200).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
