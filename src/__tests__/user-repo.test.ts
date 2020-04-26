@@ -1,6 +1,7 @@
 import { UserRepository as sut } from '../repos/user-Repo';
-import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
-import { exec } from 'child_process';
+import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
+import { User } from '../models/user';
+import data from '../data/userDs';
 
 describe('User Repo',()=>{
 
@@ -16,7 +17,7 @@ describe('User Repo',()=>{
 
 	});
 
-	test('should throw DataNotFoundError when invoking getAll and the data base is empty', async () => {
+	test('should throw DataNotFoundError when invoking getAll() and the data base is empty', async () => {
 
 		// Arrange
 		expect.assertions(1);
@@ -29,7 +30,7 @@ describe('User Repo',()=>{
 		}
 	});
 
-	test('should return a truthy user when getById is provide a specific user ID', async() => {
+	test('should return a truthy user when getById() is provide a specific user ID', async () => {
 		// Arrange
 		expect.assertions(3);
 		// Act
@@ -40,7 +41,7 @@ describe('User Repo',()=>{
 		expect(result.password).toBeUndefined();
 	});
 
-	test('should throw InvalidRequestError when getById provided invalid id', async()=>{
+	test('should throw InvalidRequestError when getById() provided invalid id', async ()=>{
 		// Arrange
 		expect.assertions(1);
 		// Act
@@ -52,7 +53,7 @@ describe('User Repo',()=>{
 		}
 	});
 
-	test('should return thruthy user when getByUsername is provide a specific username',async()=>{
+	test('should return thruthy user when getByUsername() is provide a specific username',async ()=>{
 		// Arrange
 		expect.assertions(3);
 		// Act
@@ -63,7 +64,7 @@ describe('User Repo',()=>{
 		expect(result.password).toBeUndefined();
 	});
 
-	test('should throw InvalidRequestError when getByUsername provided an invalid username', async ()=>{
+	test('should throw InvalidRequestError when getByUsername() provided an invalid username', async ()=>{
 		// Arrange
 		expect.assertions(1);
 		// Act
@@ -75,4 +76,28 @@ describe('User Repo',()=>{
 		}
 		
 	});
+
+	test('should return true when save() is provide with a valid User',async()=>{
+		// Arrange
+		expect.assertions(2);
+		// Act
+		let result = await sut.getInstance().save(new User(0, 'NewUser', 'password', 'New@user.com'));
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result.id).toBe(data.length);
+	});
+
+	test('should throw DataNotStoredError when save() is provide an invalid User ',async()=>{
+		// Arrange
+		expect.assertions(1);
+
+		// Act
+		try {
+			await sut.getInstance().save(new User(null,'','password',''));
+		}catch(e){
+		// Assert
+			expect(e instanceof DataNotStoredError).toBeTruthy();
+		}
+	});
+
 });
