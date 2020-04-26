@@ -62,4 +62,17 @@ describe('User Repo',()=>{
 		expect(result.username).toBe('KoreyKeipe');
 		expect(result.password).toBeUndefined();
 	});
+
+	test('should throw InvalidRequestError when getByUsername provided an invalid username', async ()=>{
+		// Arrange
+		expect.assertions(1);
+		// Act
+		try{
+			await sut.getInstance().getByUsername('');
+		// Arrange
+		}catch(e){
+			expect(e instanceof InvalidRequestError).toBeTruthy();
+		}
+		
+	});
 });
