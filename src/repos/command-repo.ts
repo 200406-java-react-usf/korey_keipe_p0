@@ -19,6 +19,10 @@ export class CommandRepository implements CrudRepository<Command> {
 	getAll(): Promise<Command[]>{
 		return new Promise((resolve,reject)=>{
 
+			if(data.length === 0) {
+				reject(new DataNotFoundError('No commands found in database'));
+				return;
+			}
 			setTimeout(() => {
 			
 				let commands: Command[] = [];
@@ -26,11 +30,6 @@ export class CommandRepository implements CrudRepository<Command> {
 
 				for(command of data){
 					commands.push({...command});
-				}
-
-				if(commands.length === 0){
-					reject(new DataNotFoundError('No commands found in database'));
-					return;
 				}
 
 				resolve(commands);
