@@ -1,4 +1,5 @@
 
+
 const validateId = (id: number): boolean =>{
 	return (id && typeof id === 'number' && Number.isInteger(id) && id > 0);
 };
@@ -13,9 +14,8 @@ const validateObj = (obj: Object, ...nullProperties: string[]) =>{
 		return obj[key];
 	});
 };
-
 export {
 	validateId,
-	validateString,
-	validateObj
+	validateObj,
+	validateString
 };
