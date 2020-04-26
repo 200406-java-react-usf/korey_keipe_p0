@@ -8,7 +8,6 @@ import {
 import { validateId } from '../util/validation';
 import { validateObj }from '../util/validation';
 import { validateString } from '../util/validation';
-import userDs from '../data/userDs';
 
 export class UserRepository implements CrudRepository<User> {
 
@@ -46,7 +45,7 @@ export class UserRepository implements CrudRepository<User> {
 		
 		return new Promise((resolve, reject) => {
 			
-			if(!validateId){
+			if(!validateId(id)){
 				reject(new InvalidRequestError('Invalid Id'));
 				return;
 			}
