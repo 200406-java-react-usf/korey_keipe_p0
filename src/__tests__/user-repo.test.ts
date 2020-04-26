@@ -1,5 +1,6 @@
 import { UserRepository as sut } from '../repos/user-Repo';
 import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
+import { exec } from 'child_process';
 
 describe('User Repo',()=>{
 
@@ -50,5 +51,15 @@ describe('User Repo',()=>{
 			expect(e instanceof InvalidRequestError).toBeTruthy();
 		}
 	});
-	
+
+	test('should return thruthy user when getByUsername is provide a specific username',async()=>{
+		// Arrange
+		expect.assertions(3);
+		// Act
+		let result = await sut.getInstance().getByUsername('KoreyKeipe');
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result.username).toBe('KoreyKeipe');
+		expect(result.password).toBeUndefined();
+	});
 });
