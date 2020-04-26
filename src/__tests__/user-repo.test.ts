@@ -3,8 +3,29 @@ import { InvalidRequestError, DataNotStoredError
 } from '../errors/errors';
 import { User } from '../models/user';
 import data from '../data/userDs';
+import { validateId,
+	validateObj,
+	validateString
+}from '../util/validation';
+
 
 describe('User Repo',()=>{
+
+	beforeEach(()=>{
+
+		validateObj = jest.fn().mockImplementation(()=>{
+			throw new Error('Failed to mock: validateObj');
+		});
+
+		validateString = jest.fn().mockImplementation(()=>{
+			throw new Error('Failed to mock: validateString');
+		});
+		validateId = jest.fn().mockImplementation(()=>{
+			throw new Error('Failed to mock: validateId');
+		});
+
+	});
+	
 
 	test('should return and array of all users',async ()=>{
 
@@ -18,22 +39,10 @@ describe('User Repo',()=>{
 
 	});
 
-	// test('should throw DataNotFoundError when invoking getAll() and the data base is empty', async () => {
-
-	// 	// Arrange
-	// 	expect.assertions(1);
-	// 	// Act
-	// 	try{
-	// 		await sut.getInstance().getAll();
-	// 	} catch (e){
-	// 	// Accert
-	// 		expect(e instanceof DataNotFoundError).toBeTruthy();
-	// 	}
-	// });
-
 	test('should return a truthy user when getById() is provide a specific user ID', async () => {
 		// Arrange
 		expect.assertions(3);
+		validateId = jest.fn().mockReturnValue(true);
 		// Act
 		let result = await sut.getInstance().getById(1);
 		// Assert
