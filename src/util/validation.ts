@@ -9,8 +9,8 @@ const validateString = (...string: string[]): boolean => {
 
 const validateObj = (obj: Object, ...nullProperties: string[]) =>{
 	return obj && Object.keys(obj).every(key => {
-		if(key ==  'id') return validateId(obj['id']);
 		if(nullProperties.includes(key)) return true;
+		return obj[key];
 	});
 };
 
