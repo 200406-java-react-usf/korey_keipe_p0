@@ -1,5 +1,6 @@
 import { UserRepository as sut } from '../repos/user-Repo';
-import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
+import { InvalidRequestError, DataNotStoredError
+} from '../errors/errors';
 import { User } from '../models/user';
 import data from '../data/userDs';
 
@@ -41,7 +42,7 @@ describe('User Repo',()=>{
 		expect(result.password).toBeUndefined();
 	});
 
-	test('should throw InvalidRequestError when getById() provided invalid id', async ()=>{
+	test('should throw InvalidRequestError when getById() provided invalid id', async () => {
 		// Arrange
 		expect.assertions(1);
 		// Act
@@ -53,7 +54,7 @@ describe('User Repo',()=>{
 		}
 	});
 
-	test('should return thruthy user when getByUsername() is provide a specific username', async ()=>{
+	test('should return thruthy user when getByUsername() is provide a specific username', async () => {
 		// Arrange
 		expect.assertions(3);
 		// Act
@@ -64,7 +65,7 @@ describe('User Repo',()=>{
 		expect(result.password).toBeUndefined();
 	});
 
-	test('should throw InvalidRequestError when getByUsername() provided an invalid username', async ()=>{
+	test('should throw InvalidRequestError when getByUsername() provided an invalid username', async () => {
 		// Arrange
 		expect.assertions(1);
 		// Act
@@ -77,7 +78,7 @@ describe('User Repo',()=>{
 		
 	});
 
-	test('should return newUser when save() is provide with a valid User', async ()=>{
+	test('should return newUser when save() is provide with a valid User', async () => {
 		// Arrange
 		expect.assertions(2);
 		let newUser = new User(0, 'NewUser', 'password', 'New@user.com');
@@ -88,7 +89,7 @@ describe('User Repo',()=>{
 		expect(result.id).toEqual(data.length);
 	});
 
-	test('should throw InvalidRequestError when save() is provide an invalid User ',async()=>{
+	test('should throw InvalidRequestError when save() is provide an invalid User ',async() => {
 		// Arrange
 		expect.assertions(1);
 
@@ -101,4 +102,26 @@ describe('User Repo',()=>{
 		}
 	});
 
+	test('should return true when update() is provided an updated user and data is stored', async () =>{
+		// Arrange
+		expect.assertions(1);
+
+		// Act
+		let result = await sut.getInstance().update(new User(1, 'Korey H Keipe', 'password', 'kkeipe@gmail.com'));
+
+		// Assert
+		expect(result).toBe(true);		
+	});
+
+	test('should throw DataNotStoredError when update() is provided a username that is already taken', async () => {
+		// Arrange
+		expect.assertions(1);
+
+		// Act
+		try{
+			await sut.getInstance().update(new User(1, 'ASC', 'password', 'kkeipe@gmail.com'));
+		}catch(e){
+			expect(e instanceof DataNotStoredError).toBeTruthy();
+		}
+	});
 });
