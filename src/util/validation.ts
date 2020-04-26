@@ -14,7 +14,7 @@ const validateObj = (obj: Object, ...nullProperties: string[]) =>{
 	});
 };
 
-export default {
+export {
 	validateId,
 	validateString,
 	validateObj
