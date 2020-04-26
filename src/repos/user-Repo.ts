@@ -5,9 +5,9 @@ import {
 	DataNotFoundError,
 	InvalidRequestError,
 } from '../errors/errors';
-import  validateId from '../util/validation';
-import  validateString from '../util/validation';
-import  validateObj from '../util/validation';
+import { validateId } from '../util/validation';
+import { validateObj }from '../util/validation';
+import { validateString } from '../util/validation';
 import userDs from '../data/userDs';
 
 export class UserRepository implements CrudRepository<User> {
@@ -67,7 +67,7 @@ export class UserRepository implements CrudRepository<User> {
 
 		return new Promise((resolve, reject) => {
 
-			if(!username){
+			if(!validateString(username)){
 				reject(new InvalidRequestError('Invalid username'));
 				return;
 			}
@@ -89,7 +89,9 @@ export class UserRepository implements CrudRepository<User> {
 	save(newUser: User): Promise<User>{
 
 		return new Promise((resolve, reject) => {
-			
+
+
+
 		});
 	}
 
