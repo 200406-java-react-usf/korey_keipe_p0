@@ -5,7 +5,9 @@ import {
 	DataNotFoundError,
 	InvalidRequestError,
 } from '../errors/errors';
-
+import  validateId from '../util/validation';
+import  validateString from '../util/validation';
+import  validateObj from '../util/validation';
 
 export class UserRepository implements CrudRepository<User> {
 
@@ -40,9 +42,23 @@ export class UserRepository implements CrudRepository<User> {
 	}
 
 	getById(id: number): Promise<User>{
-
+		
 		return new Promise((resolve, reject) => {
 			
+			if(!validateId){
+				reject(new InvalidRequestError('Invalid Id'));
+				return;
+			}
+
+			let user: User = data.filter((user)=>user.id === id).pop() as User;
+			
+			if(Object.keys(user).length === 0){
+				reject(new DataNotFoundError(`No user was found with id: ${id}`));
+				return;
+			}
+			
+			resolve(user);
+
 		});
 	}
 
@@ -52,6 +68,7 @@ export class UserRepository implements CrudRepository<User> {
 
 			if(!username){
 				reject(new InvalidRequestError('Invalid username'));
+				return;
 			}
 
 			setTimeout(() => {
@@ -87,5 +104,8 @@ export class UserRepository implements CrudRepository<User> {
 		return new Promise((resolve, reject) => {
 			
 		});
+	}
+	private passwordHide(){
+
 	}
 }
