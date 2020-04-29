@@ -12,10 +12,10 @@ export class UserService {
 
 		return new Promise( async (resolve, reject) => {
 			
-			let user: User;
-			let users = await this.userRepo.getAll();
+			let users: User[] = [];
+			let data = await this.userRepo.getAll();
 
-			for(user of users){
+			for(let user of data){
 				users.push({...user});
 			}
 
