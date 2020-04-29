@@ -3,30 +3,27 @@ import { InvalidRequestError, DataNotStoredError
 } from '../errors/errors';
 import { User } from '../models/user';
 import data from '../data/userDs';
-import { validateId,
-	validateObj,
-	validateString
-}from '../util/validation';
+import Validation from '../util/validation';
+
 
 
 describe('User Repo',()=>{
 
 	beforeEach(()=>{
 
-		validateObj = jest.fn().mockImplementation(()=>{
+		Validation.validateObj = jest.fn().mockImplementation(()=>{
 			throw new Error('Failed to mock: validateObj');
 		});
 
-		validateString = jest.fn().mockImplementation(()=>{
+		Validation.validateString = jest.fn().mockImplementation(()=>{
 			throw new Error('Failed to mock: validateString');
 		});
-		validateId = jest.fn().mockImplementation(()=>{
+		Validation.validateId = jest.fn().mockImplementation(()=>{
 			throw new Error('Failed to mock: validateId');
 		});
 
 	});
 	
-
 	test('should return and array of all users',async ()=>{
 
 		// Arrange
@@ -42,7 +39,7 @@ describe('User Repo',()=>{
 	test('should return a truthy user when getById() is provide a specific user ID', async () => {
 		// Arrange
 		expect.assertions(3);
-		validateId = jest.fn().mockReturnValue(true);
+		Validation.validateId = jest.fn().mockReturnValue(true);
 		// Act
 		let result = await sut.getInstance().getById(1);
 		// Assert

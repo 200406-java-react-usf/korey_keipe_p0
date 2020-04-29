@@ -1,20 +1,20 @@
 
 
-const validateId = (id: number): boolean =>{
+export const validateId = (id: number): boolean =>{
 	return (id && typeof id === 'number' && Number.isInteger(id) && id > 0);
 };
 
-const validateString = (...string: string[]): boolean => {
+export const validateString = (...string: string[]): boolean => {
 	return (string.filter(string => !string || typeof string !== 'string').length == 0);
 };
 
-const validateObj = (obj: Object, ...nullProperties: string[]) =>{
+export const validateObj = (obj: Object, ...nullProperties: string[]) =>{
 	return obj && Object.keys(obj).every(key => {
 		if(nullProperties.includes(key)) return true;
 		return obj[key];
 	});
 };
-export {
+export default {
 	validateId,
 	validateObj,
 	validateString
