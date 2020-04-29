@@ -1,5 +1,6 @@
 import { UserRepository as sut } from '../repos/user-Repo';
-import { InvalidRequestError, DataNotStoredError
+import { InvalidRequestError,
+	DataNotStoredError
 } from '../errors/errors';
 import { User } from '../models/user';
 import data from '../data/userDs';
