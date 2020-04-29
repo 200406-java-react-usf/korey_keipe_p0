@@ -12,14 +12,6 @@ import { validateString } from '../util/validation';
 
 export class UserRepository implements CrudRepository<User> {
 
-	private static instance: UserRepository;
-
-	private constructor() {}
-
-	static getInstance(){
-		return !UserRepository.instance ? UserRepository.instance = new UserRepository() : UserRepository.instance; 
-	}
-
 	getAll(): Promise<User[]> {
 
 		return new Promise((resolve, reject) => {

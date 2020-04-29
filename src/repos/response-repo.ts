@@ -9,14 +9,6 @@ import {
 
 export class ResponseRepository implements CrudRepository<Response> {
 
-	private static instance: ResponseRepository;
-
-	private constructor () {}
-
-	static getInstance(){
-		return !ResponseRepository.instance ? ResponseRepository.instance = new ResponseRepository() : ResponseRepository.instance;
-	}
-
 	getAll(): Promise<Response[]>{
 		return new Promise((resolve,reject)=>{
 

@@ -8,14 +8,6 @@ import {
 
 export class CommandRepository implements CrudRepository<Command> {
 
-	private static instance: CommandRepository;
-
-	private constructor() {}
-
-	static getInstance(){
-		return !CommandRepository.instance ? CommandRepository.instance = new CommandRepository : CommandRepository.instance;
-	}
-
 	getAll(): Promise<Command[]>{
 		return new Promise((resolve,reject)=>{
 
