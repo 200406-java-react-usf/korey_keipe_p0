@@ -14,23 +14,10 @@ export class UserRepository implements CrudRepository<User> {
 
 	getAll(): Promise<User[]> {
 
-		return new Promise((resolve, reject) => {
-			
-			if(data.length === 0){
-				reject(new DataNotFoundError('No users found in database'));
-				return;
-			}
-			setTimeout(() => {
-				
-				let users: Array<User> = [];
-				let user: User;
-				for(user of data){
-					users.push({...user});
-				}
+		return new Promise((resolve) => {
 
-				resolve(users.map((users)=>this.passwordHide(users)));
+			resolve(data);
 
-			}, 250);
 		});
 	}
 
@@ -50,7 +37,7 @@ export class UserRepository implements CrudRepository<User> {
 				return;
 			}
 			
-			resolve(this.passwordHide(user));
+			resolve(user);
 
 		});
 	}
@@ -68,7 +55,7 @@ export class UserRepository implements CrudRepository<User> {
 				
 				for (let user of data){
 					if (username == user.username){
-						resolve(this.passwordHide(user));      
+						resolve(user);      
 					}
 				}
 
@@ -96,7 +83,7 @@ export class UserRepository implements CrudRepository<User> {
 
 			newUser.id = data.length + 1;
 			data.push(newUser);
-			resolve(this.passwordHide(newUser));
+			resolve(newUser);
 
 		});
 	}
@@ -114,9 +101,5 @@ export class UserRepository implements CrudRepository<User> {
 			
 		});
 	}
-	private passwordHide(user: User){
-		let userCopy = {...user};
-		delete userCopy.password;
-		return userCopy;
-	}
+	
 }
