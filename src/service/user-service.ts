@@ -1,6 +1,12 @@
 import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
-import { DataNotFoundError } from '../errors/errors';
+import { DataNotFoundError,
+	InvalidRequestError
+} from '../errors/errors';
+import {validateId,
+	validateObj,
+	validateString
+} from '../util/validation';
 
 export class UserService {
 
@@ -13,9 +19,9 @@ export class UserService {
 		return new Promise( async (resolve, reject) => {
 			
 			let users: User[] = [];
-			let data = await this.userRepo.getAll();
+			let userData = await this.userRepo.getAll();
 
-			for(let user of data){
+			for(let user of userData){
 				users.push({...user});
 			}
 
@@ -25,6 +31,27 @@ export class UserService {
 			}
 
 			resolve(users.map((users)=>this.passwordHide(users)));
+
+		});
+	}
+
+	getUserById(id): Promise<User> {
+
+		return new Promise( async (resolve, reject) => {
+
+			if(!validateId(id)){
+				reject(new InvalidRequestError('Invalid Id'));
+				return;
+			}
+
+			let user = await this.userRepo.getById(id); 
+
+			if(Object.keys(user).length === 0){
+				reject(new DataNotFoundError(`No user was found with id: ${id}`));
+				return;
+			}
+
+			resolve(this.passwordHide(user));
 
 		});
 	}

@@ -23,19 +23,9 @@ export class UserRepository implements CrudRepository<User> {
 
 	getById(id: number): Promise<User>{
 		
-		return new Promise((resolve, reject) => {
-			
-			if(!validateId(id)){
-				reject(new InvalidRequestError('Invalid Id'));
-				return;
-			}
+		return new Promise((resolve) => {
 
 			let user: User = data.filter((user)=>user.id === id).pop() as User;
-			
-			if(Object.keys(user).length === 0){
-				reject(new DataNotFoundError(`No user was found with id: ${id}`));
-				return;
-			}
 			
 			resolve(user);
 
