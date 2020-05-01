@@ -27,4 +27,4 @@ My Project 0 - Chatbot API
 	 - Commands (id, keyword, userId)
 	 - Responses (id, text, link, commandId)
 	 
-![ChatBotERD](C:\Users\DreamCatcherTower\Downloads\ChatBotERD.png)
+![ChatBotERD](https://github.com/200406-java-react-usf/korey_keipe_p0/blob/master/images/ChatBotERD.png)
