@@ -15,53 +15,40 @@ export class UserService {
 	}
 
 	async getAllUsers(): Promise<User[]> {
-	
-		let users =  await this.userRepo.getAll();
+		
+		let users = await this.userRepo.getAll();
 
-		if(users.length === 0){
+		if(users.length == 0){
 			throw new DataNotFoundError('No users found in database');
 		}
 
 		return users.map(this.passwordHide);
+	}
+
+	async getUserById(id): Promise<User> {
+
+		if(!validateId(id)){
+			throw new InvalidRequestError('Invalid Id');
+		}
+
+		let user = await this.userRepo.getById(id); 
+
+		if(!validateObj(user)){
+			throw new DataNotFoundError(`No user was found with id: ${id}`);
+		}
+
+		return this.passwordHide(user);
 
 	}
 
-	getUserById(id): Promise<User> {
+	async saveUser(newUser: User): Promise<User>{
+	
+		if(!validateObj(newUser, 'id')){
+			throw new InvalidRequestError('Invalid User');
+		}
+		let user = await this.userRepo.save(newUser);
+		return this.passwordHide(user);
 
-		return new Promise( async (resolve, reject) => {
-
-			if(!validateId(id)){
-				reject(new InvalidRequestError('Invalid Id'));
-				return;
-			}
-
-			let user = await this.userRepo.getById(id); 
-
-			if(Object.keys(user).length === 0){
-				reject(new DataNotFoundError(`No user was found with id: ${id}`));
-				return;
-			}
-
-			resolve(this.passwordHide(user));
-
-		});
-	}
-
-	saveUser(newUser: User): Promise<User>{
-
-		return new Promise(async (resolve, reject) => {
-			
-			if(!validateObj(newUser, 'id')){
-				reject(new InvalidRequestError('Invalid User'));
-				return;
-			}
-			try{
-				let user = await this.userRepo.save(newUser);
-				resolve(user);
-			} catch(e){
-				reject(e);
-			}
-		});
 	}
 
 	private passwordHide(user: User){
