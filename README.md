@@ -23,6 +23,8 @@ Presentation:
 My Project 0 - Chatbot API
 
 	Data to persist in Db
-	 - Users
-	 - Commands
-	 - Responses
+	 - Users (id, username, password, email)
+	 - Commands (id, keyword, userId)
+	 - Responses (id, text, link, commandId)
+	 
+![ChatBotERD](C:\Users\DreamCatcherTower\Downloads\ChatBotERD.png)
