@@ -5,10 +5,8 @@ import {
 	DataNotFoundError,
 	InvalidRequestError,
 	DataNotStoredError,
+	ConflictError,
 } from '../errors/errors';
-import { validateId } from '../util/validation';
-import { validateObj }from '../util/validation';
-import { validateString } from '../util/validation';
 
 export class UserRepository implements CrudRepository<User> {
 
@@ -32,48 +30,20 @@ export class UserRepository implements CrudRepository<User> {
 		});
 	}
 
-	getByUsername(username: string): Promise<User>{
-
-		return new Promise((resolve, reject) => {
-
-			if(!validateString(username)){
-				reject(new InvalidRequestError('Invalid username'));
-				return;
-			}
-
-			setTimeout(() => {
-				
-				for (let user of data){
-					if (username == user.username){
-						resolve(user);      
-					}
-				}
-
-				reject(new DataNotFoundError(`No user found with username: ${username}`));
-
-			}, 500);
-		});
-	}
-
 	save(newUser: User): Promise<User>{
 
 		return new Promise((resolve, reject) => {
 			
-			if(!validateObj(newUser, 'id')){
-				reject(new InvalidRequestError('Invalid User'));
-				return;
-			}
-
 			for(let user of data){
 				if(newUser.username === user.username || newUser.email === user.email){
-					reject(new InvalidRequestError('Username is already in use'));
+					reject(new ConflictError('Username or Email is already in use'));
 					return;
 				}
 			}
 
 			newUser.id = data.length + 1;
 			data.push(newUser);
-			resolve(newUser);
+			return resolve(newUser);
 
 		});
 	}
