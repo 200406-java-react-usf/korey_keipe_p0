@@ -60,7 +60,6 @@ export class UserService {
 		const storedUser = await this.userRepo.save(newUser);
 
 		return this.passwordHide(storedUser);
-
 	}
 
 	async getUserByKey(queryObj: any): Promise<User> {
