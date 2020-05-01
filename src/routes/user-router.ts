@@ -10,7 +10,7 @@ UserRouter.get('/', async (req, res) => {
 		let payload = await userService.getAllUsers();
 		return res.status(200).json(payload);
 	}catch (e) {
-		return res.status(404).json(e);
+		return res.status(e.status).json(e);
 	}
 });
 
@@ -20,6 +20,16 @@ UserRouter.get('/:id', async (req,res)=>{
 		let payload = await userService.getUserById(id);	
 		return res.status(200).json(payload);
 	}catch(e){
-		return res.status(404).json(e);
+		return res.status(e.status).json(e);
+	}
+});
+
+UserRouter.post('', async (req, res) => {
+
+	try{
+		let payload = await userService.saveUser(req.body);
+		return res.status(201).json(payload);
+	}catch (e) {
+		return res.status(e.status).json(e);
 	}
 });
