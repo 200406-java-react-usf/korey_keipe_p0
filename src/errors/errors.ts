@@ -49,10 +49,18 @@ class DataNotStoredError extends AppError{
 	}
 }
 
+class InternalServerError extends AppError{
+	constructor(reason?: string){
+		super(reason, 500);
+		super.setMessage('An unexpected error has occured');
+	}
+}
+
 export {
 	DataNotFoundError,
 	DataNotStoredError,
 	AuthenticationError,
 	InvalidRequestError,
-	ConflictError
+	ConflictError,
+	InternalServerError
 };
