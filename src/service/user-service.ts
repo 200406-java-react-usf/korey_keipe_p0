@@ -1,7 +1,8 @@
 import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import { DataNotFoundError,
-	InvalidRequestError
+	InvalidRequestError,
+	DataNotStoredError
 } from '../errors/errors';
 import {validateId,
 	validateObj,
@@ -50,6 +51,16 @@ export class UserService {
 		let user = await this.userRepo.save(newUser);
 		return this.passwordHide(user);
 
+		let conflict = this.getUserByKey({username: newUser.username});
+
+		if (conflict) {
+			throw new DataNotStoredError('Username is alredy in use');
+		}
+
+		const storedUser = await this.userRepo.save(newUser);
+
+		return this.passwordHide(storedUser);
+
 	}
 
 	async getUserByKey(queryObj: any): Promise<User> {
@@ -78,7 +89,7 @@ export class UserService {
 		}
 
 		return this.passwordHide(user);
-		
+
 	}
 
 	private passwordHide(user: User){
