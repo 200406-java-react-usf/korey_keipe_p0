@@ -14,25 +14,16 @@ export class UserService {
 		this.userRepo = userRepo;
 	}
 
-	getAllUsers(): Promise<User[]> {
+	async getAllUsers(): Promise<User[]> {
+	
+		let users =  await this.userRepo.getAll();
 
-		return new Promise( async (resolve, reject) => {
-			
-			let users: User[] = [];
-			let userData = await this.userRepo.getAll();
+		if(users.length === 0){
+			throw new DataNotFoundError('No users found in database');
+		}
 
-			for(let user of userData){
-				users.push({...user});
-			}
+		return users.map(this.passwordHide);
 
-			if(users.length === 0){
-				reject(new DataNotFoundError('No users found in database'));
-				return;
-			}
-
-			resolve(users.map((users)=>this.passwordHide(users)));
-
-		});
 	}
 
 	getUserById(id): Promise<User> {

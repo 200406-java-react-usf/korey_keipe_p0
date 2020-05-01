@@ -2,21 +2,27 @@ import data from '../data/userDs';
 import { CrudRepository } from './crud-repo';
 import { User } from '../models/user';
 import { 
-	DataNotFoundError,
-	InvalidRequestError,
-	DataNotStoredError,
 	ConflictError,
+	InternalServerError
 } from '../errors/errors';
+import { connectionPool } from '..';
+import { PoolClient } from 'pg';
 
 export class UserRepository implements CrudRepository<User> {
 
-	getAll(): Promise<User[]> {
+	async getAll(): Promise<User[]> {
 
-		return new Promise((resolve) => {
-
-			resolve(data);
-
-		});
+		let client: PoolClient;
+		try{
+			client = await connectionPool.connect();
+			let sql = 'select * from App_Users';
+			let rs = await client.query(sql);
+			return rs.rows;
+		} catch(e){
+			throw new InternalServerError();
+		}finally{
+			client && client.release();
+		}
 	}
 
 	getById(id: number): Promise<User>{
