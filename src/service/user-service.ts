@@ -56,6 +56,23 @@ export class UserService {
 		});
 	}
 
+	saveUser(newUser: User): Promise<User>{
+
+		return new Promise(async (resolve, reject) => {
+			
+			if(!validateObj(newUser, 'id')){
+				reject(new InvalidRequestError('Invalid User'));
+				return;
+			}
+			try{
+				let user = await this.userRepo.save(newUser);
+				resolve(user);
+			} catch(e){
+				reject(e);
+			}
+		});
+	}
+
 	private passwordHide(user: User){
 		let userCopy = {...user};
 		delete userCopy.password;
