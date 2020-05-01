@@ -2,9 +2,11 @@ class AppError {
 
 	message: string;
 	reason: string;
+	status: number;
 
-	constructor(reason?: string){
+	constructor(reason?: string, status?: number){
 		this.message = 'An unexpected error has occured.';
+		this.status = status;
 		reason ? (this.reason = reason) : this.reason = 'Unknown reason';
 	}
 
@@ -15,28 +17,34 @@ class AppError {
 
 class DataNotFoundError extends AppError{
 	constructor(reason?: string){
-		super(reason);
+		super(reason, 404);
 		super.setMessage('Error: No data was found');
 	}
 }
 
 class InvalidRequestError extends AppError{
 	constructor(reason?: string){
-		super(reason);
+		super(reason, 400);
 		super.setMessage('Error: Invalid Request');
+	}
+}
+class ConflictError extends AppError{
+	constructor(reason?: string){
+		super(reason, 409);
+		super.setMessage('Error: Conflicting Resource');
 	}
 }
 
 class AuthenticationError extends AppError{
 	constructor(reason?: string){
-		super(reason);
+		super(reason, 401);
 		super.setMessage('Error: Authentication Failed');
 	}
 }
 
 class DataNotStoredError extends AppError{
 	constructor(reason?: string){
-		super(reason);
+		super(reason, 304);
 		super.setMessage('Error: The data has not been stored');
 	}
 }
@@ -45,5 +53,6 @@ export {
 	DataNotFoundError,
 	DataNotStoredError,
 	AuthenticationError,
-	InvalidRequestError
+	InvalidRequestError,
+	ConflictError
 };
