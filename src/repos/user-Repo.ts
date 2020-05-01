@@ -7,15 +7,25 @@ import {
 } from '../errors/errors';
 import { connectionPool } from '..';
 import { PoolClient } from 'pg';
+import { mapUserResultSet } from '../util/result-set-map';
 
 export class UserRepository implements CrudRepository<User> {
+
+	baseQuery = `
+		select
+			au.id,
+			au.username,
+			au.password,
+			au.email
+		from App_Users au
+	`;
 
 	async getAll(): Promise<User[]> {
 
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
-			let sql = 'select * from App_Users';
+			let sql = `${this.baseQuery}`;
 			let rs = await client.query(sql);
 			return rs.rows;
 		} catch(e){
@@ -25,33 +35,35 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
-	getById(id: number): Promise<User>{
+	async getById(id: number): Promise<User>{
 		
-		return new Promise((resolve) => {
-
-			let user: User = data.filter((user)=>user.id === id).pop() as User;
-			
-			resolve(user);
-
-		});
+		let client: PoolClient;
+		try{
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} where au.id = $1`;
+			let rs = await client.query(sql, [id]);
+			return rs.rows[0];
+		} catch (e){
+			throw new InternalServerError();
+		}finally{
+			client && client.release();
+		}	
 	}
 
-	save(newUser: User): Promise<User>{
+	async save(newUser: User): Promise<User>{
 
-		return new Promise((resolve, reject) => {
-			
-			for(let user of data){
-				if(newUser.username === user.username || newUser.email === user.email){
-					reject(new ConflictError('Username or Email is already in use'));
-					return;
-				}
-			}
+		let client: PoolClient;
 
-			newUser.id = data.length + 1;
-			data.push(newUser);
-			return resolve(newUser);
-
-		});
+		try {			
+			client = await connectionPool.connect();
+			let sql = `insert into App_Users (username, password, email) values (${newUser.username},${newUser.password},${newUser.email})`;
+			let rs = await client.query(sql, []);		
+			return mapUserResultSet(rs.rows[0]);
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
 	update(updateUser: User): Promise<boolean>{
