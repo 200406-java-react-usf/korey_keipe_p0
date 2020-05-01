@@ -49,50 +49,11 @@ export class UserService {
 			throw new InvalidRequestError('Invalid User');
 		}	
 
-		let conflict = this.getUserByKey({username: newUser.username});
-
-		if (conflict) {
-			throw new DataNotStoredError('Username is alredy in use');
-		}
-
-		conflict = this.getUserByKey({email: newUser.email});
-
-		if (conflict) {
-			throw new DataNotStoredError('Email is already in use');
-		}
-
+		// TODO implementation for unique username and email
+		
 		const storedUser = await this.userRepo.save(newUser);
 
 		return this.passwordHide(storedUser);
-	}
-
-	async getUserByKey(queryObj: any): Promise<User> {
-		
-		let queryKeys = Object.keys(queryObj);
-
-		if(!queryKeys.every(key => isPropertyOf(key, User))) {
-			throw new InvalidRequestError();
-		}
-
-		let key = queryKeys[0];
-		let value = queryObj[key];
-
-		if (key === 'id'){
-			return await this.getUserById(+value);
-		}
-
-		if (!validateId(value)){
-			throw new InvalidRequestError();
-		}
-
-		let user = await this.userRepo.getByKey(key, value);
-
-		if (validateObj(user)){
-			throw new DataNotFoundError();
-		}
-
-		return this.passwordHide(user);
-
 	}
 
 	private passwordHide(user: User){
