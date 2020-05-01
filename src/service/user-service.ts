@@ -47,14 +47,18 @@ export class UserService {
 	
 		if(!validateObj(newUser, 'id')){
 			throw new InvalidRequestError('Invalid User');
-		}
-		let user = await this.userRepo.save(newUser);
-		return this.passwordHide(user);
+		}	
 
 		let conflict = this.getUserByKey({username: newUser.username});
 
 		if (conflict) {
 			throw new DataNotStoredError('Username is alredy in use');
+		}
+
+		conflict = this.getUserByKey({email: newUser.email});
+
+		if (conflict) {
+			throw new DataNotStoredError('Email is already in use');
 		}
 
 		const storedUser = await this.userRepo.save(newUser);
