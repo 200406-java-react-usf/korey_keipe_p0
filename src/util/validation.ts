@@ -14,8 +14,29 @@ export const validateObj = (obj: Object, ...nullProperties: string[]) =>{
 		return obj[key];
 	});
 };
+
+export const isPropertyOf = (prop: string, type: any) => {
+	if(!prop || !type){
+		return false;
+	}
+
+	let typeCreator = <T> (Type: (new () => T)): T => {
+		return new Type();
+	};
+
+	let instance;
+	try{
+		instance = typeCreator(type);
+	} catch {
+		return false;
+	}
+
+	return Object.keys(instance).includes(prop);
+
+};
 export default {
 	validateId,
 	validateObj,
-	validateString
+	validateString,
+	isPropertyOf
 };
