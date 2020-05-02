@@ -74,11 +74,21 @@ export class UserRepository implements CrudRepository<User> {
 		});
 	}
 
-	deleteById(id: number): Promise<boolean>{
+	async deleteById(id: number): Promise<boolean>{
 
-		return new Promise((resolve, reject) => {
+		let client: PoolClient;
 			
-		});
+		try {			
+			client = await connectionPool.connect();
+			let sql = `delete from App_Users where id = $1`;
+			let rs = await client.query(sql , [id]);			
+			return rs.rows[0];
+		} catch (e) {
+			throw new InvalidRequestError();
+		} finally {
+			client && client.release();
+		}
+
 	}
 
 	async getKeys(key: string, value: string): Promise<User>{
