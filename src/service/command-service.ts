@@ -10,7 +10,6 @@ export class CommandService {
 		this.commandRepo = commandRepo;
 	}
 
-
 	async getAllCommands(): Promise<Command[]>{
 
 		let commands = await this.commandRepo.getAll();
@@ -40,7 +39,7 @@ export class CommandService {
 
 	async saveCommand(newCommand: Command): Promise<Command> {
 
-		if (validateObj(newCommand, 'id')) {
+		if (!validateObj(newCommand, 'id')) {
 			throw new InvalidRequestError('Invalide Command');
 		}
 
