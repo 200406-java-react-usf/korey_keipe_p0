@@ -1,5 +1,5 @@
 import { ResponseRepository } from '../repos/response-repo';
-import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
+import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
 import { Response } from '../models/response';
 import { response } from 'express';
 import { validateId, validateObj } from '../util/validation';
@@ -34,6 +34,22 @@ export class ResponseService {
 			throw new DataNotFoundError(`No response found with id: ${id}`);
 		}
 		return response;
+	}
+
+	async saveResponse(newResponse: Response): Promise<Response> {
+
+		if (!validateObj(newResponse, 'id')) {
+			throw new InvalidRequestError('Invalide Command');
+		}
+
+		const storedResponse = await this.responseRepo.save(newResponse);
+
+		if (!validateObj(storedResponse)){
+			throw new DataNotStoredError('New command was not saved');
+		}
+
+		return storedResponse;
+
 	}
 
 }

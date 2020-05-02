@@ -53,12 +53,13 @@ export class ResponseRepository implements CrudRepository<Response> {
 	}
 
 	async save(newResponse: Response): Promise<Response>{
+
 		let client: PoolClient;
 
 		try {
 			client = await connectionPool.connect();
 			let sql = `insert into Responses (body, link, commandId) values ($1, $2, $3) returning id`;
-			let rs = await client.query(sql, [newResponse.text, newResponse.link, +newResponse.commandId]);
+			let rs = await client.query(sql, [newResponse.body, newResponse.link, +newResponse.commandId]);
 			newResponse.id = rs.rows[0].id;
 			return newResponse;
 		} catch (e) {
