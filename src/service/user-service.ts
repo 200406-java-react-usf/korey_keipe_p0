@@ -53,7 +53,7 @@ export class UserService {
 		}	
 
 		let sameUsername = await this.userRepo.getByUsername(newUser.username);
-		let sameEmail = await this.userRepo.getByUsername(newUser.username);
+		let sameEmail = await this.userRepo.getByEmail(newUser.email);
 				
 		if(sameUsername || sameEmail){
 			throw new ConflictError('A user with this username already excists');
@@ -119,6 +119,33 @@ export class UserService {
 		}
 		
 		await this.userRepo.deleteById(value);
+
+		return true;
+
+	}
+
+	async updateUser(updateUser: User): Promise<boolean> {
+
+		if (!validateObj(updateUser)) {
+			throw new InvalidRequestError();
+		}
+
+		let sameUsername = await this.userRepo.getByUsername(updateUser.username);
+		let sameEmail = await this.userRepo.getByEmail(updateUser.email);
+			
+		console.log(sameUsername);
+		console.log(sameEmail);
+
+		if(validateObj(sameUsername)){
+			if(sameUsername.id != updateUser.id && sameUsername.username == updateUser.username) throw new ConflictError('That username is already');
+			
+		}
+		if(validateObj(sameEmail)){
+			if(sameEmail.id != updateUser.id && sameEmail.email == updateUser.email) throw new ConflictError('That email is already taken');
+		}
+
+
+		await this.userRepo.update(updateUser);
 
 		return true;
 
