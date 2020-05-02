@@ -47,24 +47,21 @@ export class UserService {
 
 	async saveUser(newUser: User): Promise<User>{
 	
+
 		if(!validateObj(newUser, 'id')){
 			throw new InvalidRequestError('Invalid User');
 		}	
 
-		// TODO implementation for unique username and email
-		let conflict = await this.getUserByKey(newUser);		
-
-		console.log(conflict);
+		let conflict = await this.userRepo.getByUsername(newUser.username);
 		
-
-		if(!validateObj(conflict)){
-			throw new ConflictError('Username and Email must be unique');
+		if(conflict){
+			throw new ConflictError('A user with this username already excists');
 		}
 
 		const storedUser = await this.userRepo.save(newUser);
 
 		return this.passwordHide(storedUser);
-	}
+	}	
 
 	async getUserByKey(obj: User): Promise<User> {
 
@@ -95,7 +92,7 @@ export class UserService {
 		}
 
 		let user = await this.userRepo.getByUsername(username);
-
+		
 		if(!validateObj(user)){
 			throw new DataNotFoundError();
 		}
