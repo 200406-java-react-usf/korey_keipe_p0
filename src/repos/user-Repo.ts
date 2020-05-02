@@ -67,11 +67,20 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
-	update(updateUser: User): Promise<boolean>{
+	async update(updateUser: User): Promise<boolean>{
 
-		return new Promise((resolve, reject) => {
-			
-		});
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `update App_Users set username = $2, password = $3, email = $4 where id = $1`;
+			let rs = await client.query(sql , [+updateUser.id, updateUser.username, updateUser.password, updateUser.email]);
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
 	async deleteById(id: number): Promise<boolean>{
