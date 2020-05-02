@@ -104,8 +104,8 @@ export class UserRepository implements CrudRepository<User> {
 
 		try {
 			client = await connectionPool.connect();
-			let sql = `${this.baseQuery} where username = $1`;
-			let rs = await client.query(sql, [username]);
+			let sql = `${this.baseQuery} where username = $1`;			
+			let rs = await client.query(sql, [username]);	
 			return rs.rows[0];
 		} catch (e) {
 			throw new InvalidRequestError();
