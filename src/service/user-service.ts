@@ -2,13 +2,15 @@ import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import { DataNotFoundError,
 	InvalidRequestError,
-	DataNotStoredError
+	DataNotStoredError,
+	ConflictError
 } from '../errors/errors';
 import {validateId,
 	validateObj,
 	validateString,
 	isPropertyOf
 } from '../util/validation';
+import { connectionPool } from '..';
 
 export class UserService {
 
@@ -50,10 +52,56 @@ export class UserService {
 		}	
 
 		// TODO implementation for unique username and email
+		let conflict = await this.getUserByKey(newUser);		
+
+		console.log(conflict);
 		
+
+		if(!validateObj(conflict)){
+			throw new ConflictError('Username and Email must be unique');
+		}
+
 		const storedUser = await this.userRepo.save(newUser);
 
 		return this.passwordHide(storedUser);
+	}
+
+	async getUserByKey(obj: User): Promise<User> {
+
+		let keys = Object.keys(obj);
+
+		if(!keys.every(key => isPropertyOf(key, User))) {
+			throw new InvalidRequestError();
+		}
+		
+		let key = keys[0];
+		
+		let value = obj[key];	
+		
+		if (!validateString(value)) {
+			throw new InvalidRequestError();
+		}
+
+		let user = await this.userRepo.getKeys(key, value);
+
+		return this.passwordHide(user);
+
+	}
+
+	async getUserByUsername(username: string): Promise<User> {
+
+		if(!validateString(username)){
+			throw new InvalidRequestError();
+		}
+
+		let user = await this.userRepo.getByUsername(username);
+
+		if(!validateObj(user)){
+			throw new DataNotFoundError();
+		}
+
+		return this.passwordHide(user);
+
 	}
 
 	private passwordHide(user: User){
