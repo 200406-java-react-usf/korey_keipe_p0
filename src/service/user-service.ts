@@ -132,9 +132,6 @@ export class UserService {
 
 		let sameUsername = await this.userRepo.getByUsername(updateUser.username);
 		let sameEmail = await this.userRepo.getByEmail(updateUser.email);
-			
-		console.log(sameUsername);
-		console.log(sameEmail);
 
 		if(validateObj(sameUsername)){
 			if(sameUsername.id != updateUser.id && sameUsername.username == updateUser.username) throw new ConflictError('That username is already');
