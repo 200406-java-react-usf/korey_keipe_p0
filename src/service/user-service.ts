@@ -102,6 +102,28 @@ export class UserService {
 
 	}
 
+	async deleteUserById(id: number): Promise<boolean> {
+
+		let keys = Object.keys(id);
+
+		if(!keys.every(key => isPropertyOf(key, User))) {
+			throw new InvalidRequestError();
+		}
+		
+		let key = keys[0];
+		
+		let value = +id[key];
+
+		if(!validateId(value)){
+			throw new InvalidRequestError();
+		}
+		
+		await this.userRepo.deleteById(value);
+
+		return true;
+
+	}
+
 	private passwordHide(user: User){
 		let userCopy = {...user};
 		delete userCopy.password;
