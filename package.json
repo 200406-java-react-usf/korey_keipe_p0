@@ -8,7 +8,7 @@
     "test": "jest --watch",
     "coverage": "jest --coverage"
   },
-  "repository": {
+  "repository": {s
     "type": "git",
     "url": "git+https://github.com/200406-java-react-usf/korey_keipe_p0.git"
   },
@@ -26,6 +26,7 @@
     "@typescript-eslint/parser": "^2.29.0",
     "eslint": "^6.8.0",
     "jest": "^25.4.0",
+    "nodemon": "^2.0.3",
     "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"
   },
