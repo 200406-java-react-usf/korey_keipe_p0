@@ -113,5 +113,21 @@ export class UserRepository implements CrudRepository<User> {
 			client && client.release();
 		}
 	}
+
+	async getByEmail(email: string): Promise<User> {
+
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} where email = $1`;			
+			let rs = await client.query(sql, [email]);	
+			return rs.rows[0];
+		} catch (e) {
+			throw new InvalidRequestError();
+		} finally {
+			client && client.release();
+		}
+	}
 	
 }
