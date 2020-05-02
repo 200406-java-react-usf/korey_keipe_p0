@@ -2,44 +2,70 @@ import data from '../data/commandDs';
 import { Command } from '../models/command';
 import { CrudRepository } from '../repos/crud-repo';
 import {
-	DataNotFoundError,
+	DataNotFoundError, InternalServerError,
 } from '../errors/errors';
+import { PoolClient} from 'pg';
+import { connectionPool } from '..';
 
 
 export class CommandRepository implements CrudRepository<Command> {
 
-	getAll(): Promise<Command[]>{
-		return new Promise((resolve,reject)=>{
+	baseQuery = `
+		select
+			id,
+			keyword,
+			userId
+		from Commands	
+	`;
 
-			if(data.length === 0) {
-				reject(new DataNotFoundError('No commands found in database'));
-				return;
-			}
-			setTimeout(() => {
+	async getAll(): Promise<Command[]>{
 			
-				let commands: Command[] = [];
-				let command: Command;
+		let client: PoolClient;
 
-				for(command of data){
-					commands.push({...command});
-				}
-
-				resolve(commands);
+		try {
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery}`;
+			let rs = await client.query(sql);
+			return rs.rows;
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 				
-			}, 250);
-		});
 	}
 
-	getById(id: number): Promise<Command>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async getById(id: number): Promise<Command>{
+		
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} where id = $1`;
+			let rs = await client.query(sql, [id]);
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
-	save(newCommand: Command): Promise<Command>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async save(newCommand: Command): Promise<Command>{
+
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `insert into Commands (keyword, userId) values ($1, $2) returning id`;
+			let rs = await client.query(sql, [newCommand.keyword, +newCommand.userId]);
+			newCommand.id = rs.rows[0].id;
+			return newCommand;
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
 	update(updatedCommand: Command): Promise<boolean>{
