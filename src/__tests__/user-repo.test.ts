@@ -4,7 +4,6 @@ import { InvalidRequestError,
 	DataNotStoredError
 } from '../errors/errors';
 import { User } from '../models/user';
-import data from '../data/userDs';
 import Validation from '../util/validation';
 
 

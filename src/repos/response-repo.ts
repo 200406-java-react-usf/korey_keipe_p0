@@ -1,4 +1,3 @@
-import data from '../data/responseDs';
 import { Response } from '../models/response';
 import { CrudRepository } from './crud-repo';
 import {
@@ -53,10 +52,20 @@ export class ResponseRepository implements CrudRepository<Response> {
 		}
 	}
 
-	save(newResponse: Response): Promise<Response>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async save(newResponse: Response): Promise<Response>{
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `insert into Responses (body, link, commandId) values ($1, $2, $3) returning id`;
+			let rs = await client.query(sql, [newResponse.text, newResponse.link, +newResponse.commandId]);
+			newResponse.id = rs.rows[0].id;
+			return newResponse;
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
 	update(updatedResponse: Response): Promise<boolean>{

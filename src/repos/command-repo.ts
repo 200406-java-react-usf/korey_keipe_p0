@@ -1,4 +1,3 @@
-import data from '../data/commandDs';
 import { Command } from '../models/command';
 import { CrudRepository } from '../repos/crud-repo';
 import {
@@ -80,4 +79,3 @@ export class CommandRepository implements CrudRepository<Command> {
 		});
 	}
 }
-
