@@ -34,6 +34,7 @@ export const isPropertyOf = (prop: string, type: any) => {
 	return Object.keys(instance).includes(prop);
 
 };
+
 export default {
 	validateId,
 	validateObj,
