@@ -6,14 +6,14 @@ export const ResponseRouter = express.Router();
 
 const responseService = Appconfig.responseService;
 
-// ResponseRouter.get('/', async (req, res) => {
-// 	try{
-// 		let result = await responseService.getAllResponses();
-// 		return res.status(200).json(result);
-// 	}catch(e){
-// 		return res.status(404).json(e);
-// 	}
-// });
+ResponseRouter.get('/', async (req, res) => {
+	try{
+		let result = await responseService.getAllResponses();
+		return res.status(200).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
 
 // ResponseRouter.get('/:id', async (req, res) => {
 // 	const id = +req.params.id;

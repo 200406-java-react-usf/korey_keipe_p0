@@ -2,33 +2,39 @@ import data from '../data/responseDs';
 import { Response } from '../models/response';
 import { CrudRepository } from './crud-repo';
 import {
-	DataNotFoundError,
+	DataNotFoundError, InternalServerError,
 } from '../errors/errors';
+import { PoolClient } from 'pg';
+import { connectionPool } from '..';
 
 
 
 export class ResponseRepository implements CrudRepository<Response> {
 
-	getAll(): Promise<Response[]>{
-		return new Promise((resolve,reject)=>{
+	baseQuery = `
+			select
+				id,
+				body,
+				link,
+				commandId
+			from Responses	
+	`;
 
-			if(data.length === 0){
-				reject(new DataNotFoundError('No responses found in database'));
-				return;
-			}
-			setTimeout(() => {
-			
-				let responses: Response[] = [];
-				let response: Response;
+	async getAll(): Promise<Response[]>{
 
-				for(response of data){
-					responses.push({...response});
-				}
+		let client: PoolClient;
 
-				resolve(responses);
-				
-			}, 250);
-		});
+		try {
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} order by id`;
+			let rs = await client.query(sql);
+			return rs.rows;
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
+
 	}
 
 	getById(id: number): Promise<Response>{
