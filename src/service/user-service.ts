@@ -21,12 +21,12 @@ export class UserService {
 	async getAllUsers(): Promise<User[]> {
 		
 		let users = await this.userRepo.getAll();
-
-		if(users.length == 0){
-			throw new DataNotFoundError('No users found in database');
+	
+		if (users.length == 0){
+			throw new DataNotFoundError('No users found in the database');
 		}
 
-		return users.map(this.passwordHide);
+		return users;
 	}
 
 	async getUserById(id): Promise<User> {
