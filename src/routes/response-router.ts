@@ -25,5 +25,15 @@ ResponseRouter.get('/:id', async (req, res) => {
 	}
 });
 
+ResponseRouter.post('', async (req, res) => {
+	
+	try{
+		let result = await responseService.saveResponse(req.body);
+		return res.status(200).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
+
 
 
