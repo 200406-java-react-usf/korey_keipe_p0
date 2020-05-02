@@ -52,9 +52,10 @@ export class UserService {
 			throw new InvalidRequestError('Invalid User');
 		}	
 
-		let conflict = await this.userRepo.getByUsername(newUser.username);
-		
-		if(conflict){
+		let sameUsername = await this.userRepo.getByUsername(newUser.username);
+		let sameEmail = await this.userRepo.getByUsername(newUser.username);
+				
+		if(sameUsername || sameEmail){
 			throw new ConflictError('A user with this username already excists');
 		}
 
@@ -63,7 +64,7 @@ export class UserService {
 		return this.passwordHide(storedUser);
 	}	
 
-	async getUserByKey(obj: User): Promise<User> {
+	async getUserKey(obj: User): Promise<User> {
 
 		let keys = Object.keys(obj);
 
