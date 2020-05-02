@@ -15,15 +15,15 @@ ResponseRouter.get('/', async (req, res) => {
 	}
 });
 
-// ResponseRouter.get('/:id', async (req, res) => {
-// 	const id = +req.params.id;
-// 	try{
-// 		let result = await responseService.getResponseById(id);
-// 		return res.status(200).json(result);
-// 	}catch(e){
-// 		return res.status(404).json(e);
-// 	}
-// });
+ResponseRouter.get('/:id', async (req, res) => {
+	const id = +req.params.id;
+	try{
+		let result = await responseService.getResponseById(id);
+		return res.status(200).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
 
 
 

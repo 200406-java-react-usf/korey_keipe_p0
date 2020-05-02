@@ -37,10 +37,20 @@ export class ResponseRepository implements CrudRepository<Response> {
 
 	}
 
-	getById(id: number): Promise<Response>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async getById(id: number): Promise<Response>{
+		
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} where id = $1`;
+			let rs = await client.query(sql, [+id]);	
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
 	save(newResponse: Response): Promise<Response>{

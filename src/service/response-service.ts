@@ -1,6 +1,8 @@
 import { ResponseRepository } from '../repos/response-repo';
-import { DataNotFoundError } from '../errors/errors';
+import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
 import { Response } from '../models/response';
+import { response } from 'express';
+import { validateId, validateObj } from '../util/validation';
 
 export class ResponseService {
 
@@ -18,6 +20,20 @@ export class ResponseService {
 
 		return responses;
 
+	}
+
+	async getResponseById(id: number): Promise<Response> {
+
+		if (!validateId(id)){
+			throw new InvalidRequestError('Invalid Id');
+		}
+
+		let response = await this.responseRepo.getById(id);	
+
+		if (!validateObj(response)){
+			throw new DataNotFoundError(`No response found with id: ${id}`);
+		}
+		return response;
 	}
 
 }
