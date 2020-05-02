@@ -33,3 +33,13 @@ UserRouter.post('', async (req, res) => {
 		return res.status(e.status).json(e);
 	}
 });
+
+UserRouter.delete('', async (req, res) => {
+
+	try{
+		let payload = await userService.deleteUserById(req.body);
+		return res.status(202).json(payload);
+	}catch (e) {
+		return res.status(e.status).json(e);
+	}
+});
