@@ -1,14 +1,14 @@
 export class Response{
 
 	id: number;
-	text: string;
+	body: string;
 	link: string;
 	commandId: number;
 
-	constructor(id: number, text: string, link: string, commandId: number){
+	constructor(id: number, body: string, link: string, commandId: number){
 
 		this.id = id;
-		this.text = text;
+		this.body = body;
 		this.link = link;
 		this.commandId = commandId;
 
