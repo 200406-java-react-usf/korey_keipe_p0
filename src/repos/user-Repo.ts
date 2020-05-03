@@ -1,7 +1,6 @@
 import { CrudRepository } from './crud-repo';
 import { User } from '../models/user';
 import { 
-	ConflictError,
 	InternalServerError,
 	InvalidRequestError
 } from '../errors/errors';

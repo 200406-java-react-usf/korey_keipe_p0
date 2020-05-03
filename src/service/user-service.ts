@@ -2,7 +2,6 @@ import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import { DataNotFoundError,
 	InvalidRequestError,
-	DataNotStoredError,
 	ConflictError
 } from '../errors/errors';
 import {validateId,
@@ -10,7 +9,6 @@ import {validateId,
 	validateString,
 	isPropertyOf
 } from '../util/validation';
-import { connectionPool } from '..';
 
 export class UserService {
 
