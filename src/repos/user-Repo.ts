@@ -3,6 +3,7 @@ import { User } from '../models/user';
 import { InternalServerError } from '../errors/errors';
 import { connectionPool } from '..';
 import { PoolClient } from 'pg';
+import { mapUserResultSet } from '../util/result-set-map';
 
 export class UserRepository implements CrudRepository<User> {
 
@@ -22,7 +23,7 @@ export class UserRepository implements CrudRepository<User> {
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} order by id`;
 			let rs = await client.query(sql);	
-			return rs.rows;
+			return rs.rows.map(mapUserResultSet);
 		} catch(e){
 			throw new InternalServerError();
 		}finally{
@@ -37,7 +38,7 @@ export class UserRepository implements CrudRepository<User> {
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} where id = $1`;
 			let rs = await client.query(sql, [id]);
-			return rs.rows[0];
+			return mapUserResultSet(rs.rows[0]);
 		} catch (e){
 			throw new InternalServerError();
 		}finally{
@@ -69,8 +70,8 @@ export class UserRepository implements CrudRepository<User> {
 		try {
 			client = await connectionPool.connect();
 			let sql = `update App_Users set username = $2, password = $3, email = $4 where id = $1`;
-			let rs = await client.query(sql , [+updateUser.id, updateUser.username, updateUser.password, updateUser.email]);
-			return rs.rows[0];
+			await client.query(sql , [+updateUser.id, updateUser.username, updateUser.password, updateUser.email]);
+			return true;
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -85,8 +86,8 @@ export class UserRepository implements CrudRepository<User> {
 		try {			
 			client = await connectionPool.connect();			
 			let sql = `delete from App_Users where id = $1`;
-			let rs = await client.query(sql , [id]);			
-			return rs.rows[0];
+			await client.query(sql , [id]);			
+			return true;
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -102,7 +103,7 @@ export class UserRepository implements CrudRepository<User> {
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} where username = $1`;			
 			let rs = await client.query(sql, [username]);	
-			return rs.rows[0];
+			return mapUserResultSet(rs.rows[0]);
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -118,7 +119,7 @@ export class UserRepository implements CrudRepository<User> {
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} where email = $1`;			
 			let rs = await client.query(sql, [email]);	
-			return rs.rows[0];
+			return mapUserResultSet(rs.rows[0]);
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
