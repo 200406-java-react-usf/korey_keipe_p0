@@ -1,5 +1,4 @@
 import express from 'express';
-import { ResponseRepository } from '../repos/response-repo';
 import Appconfig from '../config/app';
 
 export const ResponseRouter = express.Router();
