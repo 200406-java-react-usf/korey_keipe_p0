@@ -15,6 +15,12 @@ export const validateObj = (obj: Object, ...nullProperties: string[]) =>{
 	});
 };
 
+export const vaildateEmptyObj = (obj: Object) => {
+	if (Object.keys(obj).length == 0){
+		return true;
+	}
+};
+
 export const isPropertyOf = (prop: string, type: any) => {
 	if(!prop || !type){
 		return false;
@@ -39,5 +45,6 @@ export default {
 	validateId,
 	validateObj,
 	validateString,
+	vaildateEmptyObj,
 	isPropertyOf
 };
