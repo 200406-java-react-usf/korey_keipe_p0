@@ -1,9 +1,6 @@
 import { CrudRepository } from './crud-repo';
 import { User } from '../models/user';
-import { 
-	InternalServerError,
-	InvalidRequestError
-} from '../errors/errors';
+import { InternalServerError } from '../errors/errors';
 import { connectionPool } from '..';
 import { PoolClient } from 'pg';
 
@@ -107,7 +104,7 @@ export class UserRepository implements CrudRepository<User> {
 			let rs = await client.query(sql, [username]);	
 			return rs.rows[0];
 		} catch (e) {
-			throw new InvalidRequestError();
+			throw new InternalServerError();
 		} finally {
 			client && client.release();
 		}
@@ -123,7 +120,7 @@ export class UserRepository implements CrudRepository<User> {
 			let rs = await client.query(sql, [email]);	
 			return rs.rows[0];
 		} catch (e) {
-			throw new InvalidRequestError();
+			throw new InternalServerError();
 		} finally {
 			client && client.release();
 		}
