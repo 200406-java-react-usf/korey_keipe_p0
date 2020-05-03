@@ -69,10 +69,20 @@ export class ResponseRepository implements CrudRepository<Response> {
 		}
 	}
 
-	update(updatedResponse: Response): Promise<boolean>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async update(updatedResponse: Response): Promise<boolean>{
+		
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `update Responses set body = $2, link = $3, commandId = $4 where id = $1`;
+			let rs = await client.query(sql , [+updatedResponse.id, updatedResponse.body, updatedResponse.link, +updatedResponse.commandId]);
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 
 	async deleteById(id: number): Promise<boolean>{

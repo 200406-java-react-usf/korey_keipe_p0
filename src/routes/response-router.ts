@@ -35,6 +35,16 @@ ResponseRouter.post('', async (req, res) => {
 	}
 });
 
+ResponseRouter.put('', async (req, res) => {
+	
+	try{
+		let result = await responseService.updateResponse(req.body);
+		return res.status(202).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
+
 ResponseRouter.delete('', async (req, res) => {
 	
 	try{

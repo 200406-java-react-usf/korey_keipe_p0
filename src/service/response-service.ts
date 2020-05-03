@@ -52,6 +52,16 @@ export class ResponseService {
 
 	}
 
+	async updateResponse(updateResponse: Response): Promise<boolean> {
+
+		if (!validateObj(updateResponse)) {
+			throw new InvalidRequestError();
+		}
+		await this.responseRepo.update(updateResponse);
+
+		return true;
+	}
+
 	async deleteResponseById(id: number): Promise<boolean> {
 
 		let keys = Object.keys(id);
