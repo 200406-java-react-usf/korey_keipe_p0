@@ -7,7 +7,8 @@ import { DataNotFoundError,
 import {validateId,
 	validateObj,
 	validateString,
-	isPropertyOf
+	isPropertyOf,
+	vaildateEmptyObj
 } from '../util/validation';
 
 export class UserService {
@@ -52,8 +53,8 @@ export class UserService {
 
 		let sameUsername = await this.userRepo.getByUsername(newUser.username);
 		let sameEmail = await this.userRepo.getByEmail(newUser.email);
-				
-		if(sameUsername || sameEmail){
+						
+		if(!vaildateEmptyObj(sameUsername) || !vaildateEmptyObj(sameEmail)){
 			throw new ConflictError('A user with this username already excists');
 		}
 
