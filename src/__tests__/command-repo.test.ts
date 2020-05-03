@@ -62,4 +62,26 @@ describe('Command Repo', ()=>{
 		expect(mockConnect).toBeCalledTimes(1);
 
 	});
+
+	test('should return and empty array whe getAll does not find commands in the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return { rows: [] }; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		let result = await sut.getAll();
+
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result instanceof Array).toBe(true);
+		expect(result.length).toBe(0);
+		expect(mockConnect).toBeCalledTimes(1);
+
+	});
 });
