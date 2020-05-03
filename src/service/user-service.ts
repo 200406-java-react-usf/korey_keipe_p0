@@ -62,28 +62,6 @@ export class UserService {
 		return this.passwordHide(storedUser);
 	}	
 
-	async getUserKey(obj: User): Promise<User> {
-
-		let keys = Object.keys(obj);
-
-		if(!keys.every(key => isPropertyOf(key, User))) {
-			throw new InvalidRequestError();
-		}
-		
-		let key = keys[0];
-		
-		let value = obj[key];	
-		
-		if (!validateString(value)) {
-			throw new InvalidRequestError();
-		}
-
-		let user = await this.userRepo.getKeys(key, value);
-
-		return this.passwordHide(user);
-
-	}
-
 	async getUserByUsername(username: string): Promise<User> {
 
 		if(!validateString(username)){

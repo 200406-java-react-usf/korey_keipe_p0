@@ -97,23 +97,6 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
-	async getKeys(key: string, value: string): Promise<User>{
-		
-		let client: PoolClient;
-
-		try{
-			client = await connectionPool.connect();
-			let sql = `select * from App_Users where ${key} = $1 `;
-			let rs = await client.query(sql, [value]);					
-			return rs.rows[0];
-		} catch (e) {
-			throw new InvalidRequestError();
-		} finally {
-			client && client.release();
-		}
-
-	}
-
 	async getByUsername(username: string): Promise<User> {
 
 		let client: PoolClient;
