@@ -1,7 +1,6 @@
 import { UserRepository } from '../repos/user-Repo';
 import * as mockIndex from '..';
 import { User } from '../models/user';
-import { executionAsyncId } from 'async_hooks';
 
 jest.mock('..', () => {
 	return {
@@ -75,6 +74,22 @@ describe('User Repo',()=>{
 		expect(result instanceof Array).toBe(true);
 		expect(result.length).toBe(0);
 		expect(mockConnect).toBeCalledTimes(1);
+
+	});
+
+	test('should return and user when getById recieves a specified user from the database',async ()=>{
+
+		// Arrange
+		expect.hasAssertions();
+
+		let mockUser = new User (1, 'un', 'pw', 'email');
+
+		// Act
+		let result = await sut.getById(1);
+
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result instanceof User).toBe(true);
 
 	});
 });

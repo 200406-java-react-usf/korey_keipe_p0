@@ -21,7 +21,7 @@ export class UserRepository implements CrudRepository<User> {
 		try{
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} order by id`;
-			let rs = await client.query(sql);
+			let rs = await client.query(sql);	
 			return rs.rows;
 		} catch(e){
 			throw new InternalServerError();
