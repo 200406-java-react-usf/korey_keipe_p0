@@ -1,45 +1,80 @@
 import { UserRepository } from '../repos/user-Repo';
-import { UserService } from '../service/user-service';
-import { InvalidRequestError,
-	DataNotStoredError
-} from '../errors/errors';
+import * as mockIndex from '..';
 import { User } from '../models/user';
-import Validation from '../util/validation';
+import { executionAsyncId } from 'async_hooks';
+
+jest.mock('..', () => {
+	return {
+		connectionPool: {
+			connect: jest.fn()
+		}
+	};
+});
 
 describe('User Repo',()=>{
 
-	let sut: UserService;
-	let mockRepo: UserRepository = new UserRepository;
+	let sut = new UserRepository();
+	let mockConnect = mockIndex.connectionPool.connect;
 
-	let mockUsers = [
-		new User(1, 'ClydesCreations', 'password', 'yoopertrooper906@gmail.com'),
-		new User(2, 'KoreyKeipe', 'password', 'kkeipe@gmail.com'),
-		new User(3, 'ASC', 'password', 'korey.keipe@dreamcatcherllc.us'),
-	];
+	beforeEach( ()=> {
 
-	beforeEach(()=>{
-
-		sut = new UserService(mockRepo);
-
-		for (let method in UserRepository.prototype){
-			UserRepository.prototype[method] = jest.fn().mockImplementation(()=>{
-				throw new Error(`Failed to mock external method: UserRepository.${method}`);
-			});
-		}
-
+		(mockConnect as jest.Mock).mockClear().mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => {
+					return {
+						rows: [
+							{
+								id: 1,
+								username: 'KoreyKeipe',
+								password: 'password',
+								email: 'kkeipe@gmail.com'
+							}
+						]
+					};
+				}),
+				release: jest.fn()
+			};
+		});
 	});
 	
-	test('should return and array of all users',async ()=>{
+	
+	test('should return and array of users when getAll finds users in the database',async ()=>{
 
 		// Arrange
-		expect.assertions(2);
-		UserRepository.prototype.getAll = jest.fn().mockReturnValue(mockUsers);
+		expect.hasAssertions();
+
+		let mockUser = new User (1, 'un', 'pw', 'email');
+
 		// Act
-		let result = await sut.getAllUsers();
-		// Accert
+		let result = await sut.getAll();
+
+		// Assert
 		expect(result).toBeTruthy();
-		expect(result.length).toBeGreaterThan(0);
+		expect(result instanceof Array).toBe(true);
+		expect(result.length).toBe(1);
+		expect(mockConnect).toBeCalledTimes(1);
 
 	});
 
+	test('should return and empty array whe getAll does not find users in the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return { rows: [] }; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		let result = await sut.getAll();
+
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result instanceof Array).toBe(true);
+		expect(result.length).toBe(0);
+		expect(mockConnect).toBeCalledTimes(1);
+
+	});
 });
