@@ -35,5 +35,15 @@ ResponseRouter.post('', async (req, res) => {
 	}
 });
 
+ResponseRouter.delete('', async (req, res) => {
+	
+	try{
+		let result = await responseService.deleteResponseById(req.body);
+		return res.status(202).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
+
 
 

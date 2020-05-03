@@ -2,7 +2,7 @@ import { ResponseRepository } from '../repos/response-repo';
 import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
 import { Response } from '../models/response';
 import { response } from 'express';
-import { validateId, validateObj } from '../util/validation';
+import { validateId, validateObj, isPropertyOf } from '../util/validation';
 
 export class ResponseService {
 
@@ -49,6 +49,28 @@ export class ResponseService {
 		}
 
 		return storedResponse;
+
+	}
+
+	async deleteResponseById(id: number): Promise<boolean> {
+
+		let keys = Object.keys(id);
+
+		if(!keys.every(key => isPropertyOf(key, Response))) {
+			throw new InvalidRequestError();
+		}
+		
+		let key = keys[0];
+		
+		let value = +id[key];
+
+		if(!validateId(value)){
+			throw new InvalidRequestError();
+		}
+		
+		await this.responseRepo.deleteById(value);
+
+		return true;
 
 	}
 

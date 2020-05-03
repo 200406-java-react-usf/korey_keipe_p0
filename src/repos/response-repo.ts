@@ -75,10 +75,21 @@ export class ResponseRepository implements CrudRepository<Response> {
 		});
 	}
 
-	deleteById(id: number): Promise<boolean>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async deleteById(id: number): Promise<boolean>{
+
+		let client: PoolClient;
+			
+		try {			
+			client = await connectionPool.connect();
+			let sql = `delete from Responses where id = $1`;
+			let rs = await client.query(sql , [id]);			
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
+
 	}
 
 
