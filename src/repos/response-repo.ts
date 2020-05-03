@@ -1,12 +1,10 @@
 import { Response } from '../models/response';
 import { CrudRepository } from './crud-repo';
 import {
-	DataNotFoundError, InternalServerError,
+	InternalServerError,
 } from '../errors/errors';
 import { PoolClient } from 'pg';
 import { connectionPool } from '..';
-
-
 
 export class ResponseRepository implements CrudRepository<Response> {
 
@@ -101,7 +99,5 @@ export class ResponseRepository implements CrudRepository<Response> {
 		}
 
 	}
-
-
 
 }
