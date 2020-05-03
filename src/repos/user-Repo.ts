@@ -86,16 +86,15 @@ export class UserRepository implements CrudRepository<User> {
 		let client: PoolClient;
 			
 		try {			
-			client = await connectionPool.connect();
+			client = await connectionPool.connect();			
 			let sql = `delete from App_Users where id = $1`;
 			let rs = await client.query(sql , [id]);			
 			return rs.rows[0];
 		} catch (e) {
-			throw new InvalidRequestError();
+			throw new InternalServerError();
 		} finally {
 			client && client.release();
 		}
-
 	}
 
 	async getKeys(key: string, value: string): Promise<User>{
