@@ -1,6 +1,6 @@
 import { CommandRepository } from '../repos/command-repo';
 import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
-import { validateId, validateObj } from '../util/validation';
+import { validateId, validateObj, isPropertyOf } from '../util/validation';
 import Appconfig from '../config/app';
 import { Command } from '../models/command';
 
@@ -63,5 +63,26 @@ export class CommandService {
 
 		return true;
 
+	}
+
+	async deleteCommandById(id: number): Promise<boolean> {
+
+		let keys = Object.keys(id);
+
+		if(!keys.every(key => isPropertyOf(key, Command))) {
+			throw new InvalidRequestError();
+		}
+		
+		let key = keys[0];
+		
+		let value = +id[key];
+
+		if(!validateId(value)){
+			throw new InvalidRequestError('Invalid Id');
+		}		
+
+		await this.commandRepo.deleteById(value);
+
+		return true;
 	}
 }

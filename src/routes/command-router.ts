@@ -43,3 +43,13 @@ CommandRouter.put('', async (req, res) => {
 		return res.status(404).json(e);
 	}
 });
+
+CommandRouter.delete('', async (req, res) => {
+	
+	try{
+		let result = await commandService.deleteCommandById(req.body);
+		return res.status(202).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});

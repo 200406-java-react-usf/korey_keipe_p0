@@ -1,7 +1,7 @@
 import { Command } from '../models/command';
 import { CrudRepository } from '../repos/crud-repo';
 import {
-	DataNotFoundError, InternalServerError,
+	InternalServerError,
 } from '../errors/errors';
 import { PoolClient} from 'pg';
 import { connectionPool } from '..';
@@ -84,9 +84,19 @@ export class CommandRepository implements CrudRepository<Command> {
 
 	}
 
-	deleteById(id: number): Promise<boolean>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async deleteById(id: number): Promise<boolean>{
+
+		let client: PoolClient;
+
+		try {			
+			client = await connectionPool.connect();
+			let sql = `delete from Commands where id = $1`;
+			let rs = await client.query(sql , [id]);			
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
 	}
 }
