@@ -1,7 +1,6 @@
 import { CommandRepository } from '../repos/command-repo';
 import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
 import { validateId, validateObj, isPropertyOf } from '../util/validation';
-import Appconfig from '../config/app';
 import { Command } from '../models/command';
 
 export class CommandService {

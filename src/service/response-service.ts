@@ -1,7 +1,6 @@
 import { ResponseRepository } from '../repos/response-repo';
 import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
 import { Response } from '../models/response';
-import { response } from 'express';
 import { validateId, validateObj, isPropertyOf } from '../util/validation';
 
 export class ResponseService {
