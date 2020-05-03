@@ -17,5 +17,5 @@ const responseService = new ResponseService(responseRepo);
 export default {
 	userService,
 	commandService,
-	responseService
+	responseService,
 };
