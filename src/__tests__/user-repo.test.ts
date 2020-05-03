@@ -1,5 +1,6 @@
 import { UserRepository } from '../repos/user-Repo';
 import * as mockIndex from '..';
+import * as mockMapper from '../util/result-set-map';
 import { User } from '../models/user';
 
 jest.mock('..', () => {
@@ -7,6 +8,12 @@ jest.mock('..', () => {
 		connectionPool: {
 			connect: jest.fn()
 		}
+	};
+});
+
+jest.mock('../util/result-set-map', () => {
+	return {
+		mapUserResultSet: jest.fn()
 	};
 });
 
@@ -34,6 +41,7 @@ describe('User Repo',()=>{
 				release: jest.fn()
 			};
 		});
+		(mockMapper.mapUserResultSet as jest.Mock).mockClear();
 	});
 	
 	
@@ -43,6 +51,7 @@ describe('User Repo',()=>{
 		expect.hasAssertions();
 
 		let mockUser = new User (1, 'un', 'pw', 'email');
+		(mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(mockUser);
 
 		// Act
 		let result = await sut.getAll();
@@ -83,6 +92,8 @@ describe('User Repo',()=>{
 		expect.hasAssertions();
 
 		let mockUser = new User (1, 'un', 'pw', 'email');
+		(mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(mockUser);
+
 
 		// Act
 		let result = await sut.getById(1);
