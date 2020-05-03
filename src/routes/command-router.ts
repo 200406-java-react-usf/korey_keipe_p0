@@ -1,5 +1,4 @@
 import express from 'express';
-import { CommandRepository } from '../repos/command-repo';
 import Appconfig from '../config/app';
 
 export const CommandRouter = express.Router();
@@ -29,7 +28,17 @@ CommandRouter.post('', async (req, res) => {
 	
 	try{
 		let result = await commandService.saveCommand(req.body);
-		return res.status(200).json(result);
+		return res.status(202).json(result);
+	}catch(e){
+		return res.status(404).json(e);
+	}
+});
+
+CommandRouter.put('', async (req, res) => {
+	
+	try{
+		let result = await commandService.updateCommand(req.body);
+		return res.status(202).json(result);
 	}catch(e){
 		return res.status(404).json(e);
 	}

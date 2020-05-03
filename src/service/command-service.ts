@@ -52,4 +52,16 @@ export class CommandService {
 		return storedCommand;
 
 	}
+
+	async updateCommand(updateCommand: Command): Promise<boolean> {
+
+		if (!validateObj(updateCommand)) {
+			throw new InvalidRequestError('Invalid Command');
+		}
+
+		await this.commandRepo.update(updateCommand);
+
+		return true;
+
+	}
 }

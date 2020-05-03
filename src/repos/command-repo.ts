@@ -23,7 +23,7 @@ export class CommandRepository implements CrudRepository<Command> {
 
 		try {
 			client = await connectionPool.connect();
-			let sql = `${this.baseQuery}`;
+			let sql = `${this.baseQuery} order by id`;
 			let rs = await client.query(sql);
 			return rs.rows;
 		} catch (e) {
@@ -67,10 +67,21 @@ export class CommandRepository implements CrudRepository<Command> {
 		}
 	}
 
-	update(updatedCommand: Command): Promise<boolean>{
-		return new Promise((resolve,reject)=>{
-			reject(new DataNotFoundError());
-		});
+	async update(updatedCommand: Command): Promise<boolean>{
+	
+		let client: PoolClient;
+
+		try {
+			client = await connectionPool.connect();
+			let sql = `update Commands set keyword = $2, userId = $3 where id = $1`;
+			let rs = await client.query(sql, [+updatedCommand.id, updatedCommand.keyword, +updatedCommand.userId]);
+			return rs.rows[0];
+		} catch (e) {
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
+
 	}
 
 	deleteById(id: number): Promise<boolean>{
