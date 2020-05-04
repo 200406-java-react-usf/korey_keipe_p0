@@ -65,9 +65,7 @@ export class UserService {
 	}	
 
 	async deleteUserById(id: any): Promise<boolean> {
-
-		console.log(id);
-		
+	
 		let keys = Object.keys(id);
 
 		if(!keys.every(key => isPropertyOf(key, User))) {
@@ -77,8 +75,6 @@ export class UserService {
 		let key = keys[0];
 		
 		let value = +id[key];
-
-		console.log(value);
 
 		if(!validateId(value)){
 			throw new InvalidRequestError();
@@ -99,6 +95,9 @@ export class UserService {
 		let sameUsername = await this.userRepo.getByUsername(updateUser.username);
 		let sameEmail = await this.userRepo.getByEmail(updateUser.email);
 
+		console.log(sameUsername);
+		console.log(sameEmail);
+
 		if(validateObj(sameUsername)){
 			if(sameUsername.id != updateUser.id && sameUsername.username == updateUser.username) throw new ConflictError('That username is already');
 			
@@ -106,7 +105,6 @@ export class UserService {
 		if(validateObj(sameEmail)){
 			if(sameEmail.id != updateUser.id && sameEmail.email == updateUser.email) throw new ConflictError('That email is already taken');
 		}
-
 
 		await this.userRepo.update(updateUser);
 
