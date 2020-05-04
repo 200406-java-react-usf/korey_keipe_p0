@@ -132,5 +132,55 @@ describe('userService', () => {
 
 	});
 
+	test('should throw InvalidRequestError when getUserById is given a of a decimal value)', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getById = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.getUserById(1.01);
+		} catch (e) {
+
+			// Assert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+
+	});
+
+	test('should throw InvalidRequestError when getUserById is given not a number)', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getById = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.getUserById(NaN);
+		} catch (e) {
+
+			// Assert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+
+	});
+
+	test('should throw DataNotFoundError when getUserById is given a valid id that is not in the database)', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getById = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.getUserById(1104);
+		} catch (e) {
+
+			// Assert
+			expect(e instanceof DataNotFoundError).toBe(true);
+		}
+
+	});
 
 });
