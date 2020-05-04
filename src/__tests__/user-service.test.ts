@@ -224,4 +224,39 @@ describe('userService', () => {
 			expect(e instanceof ConflictError).toBe(true);
 		}
 	});
+
+	test('should throw InvalidRequestError when saveUser is envoked and provided an invalid user', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(false);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(false);
+		mockRepo.getByUsername = jest.fn().mockReturnValue({});
+		mockRepo.getByEmail = jest.fn().mockReturnValue({});
+
+		// Act
+		try {
+			await sut.saveUser(new User (4, '', 'password', 'test@user.com'));
+		} catch (e) {
+		// Accert			
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
+	test('should return true when deleteById succesfully deletes a user', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateId = jest.fn().mockReturnValue(true);
+		validation.isPropertyOf = jest.fn().mockReturnValue(true);
+		mockRepo.deleteById = jest.fn().mockReturnValue(true);
+
+		// Act
+		let result = await sut.deleteUserById({"id": 1});
+		console.log(result);
+		
+		// Accert
+		expect(result).toBe(true);
+
+	});
 });

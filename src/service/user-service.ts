@@ -64,24 +64,10 @@ export class UserService {
 		return this.passwordHide(storedUser);
 	}	
 
-	async getUserByUsername(username: string): Promise<User> {
+	async deleteUserById(id: any): Promise<boolean> {
 
-		if(!validateString(username)){
-			throw new InvalidRequestError();
-		}
-
-		let user = await this.userRepo.getByUsername(username);
+		console.log(id);
 		
-		if(!validateObj(user)){
-			throw new DataNotFoundError();
-		}
-
-		return this.passwordHide(user);
-
-	}
-
-	async deleteUserById(id: number): Promise<boolean> {
-
 		let keys = Object.keys(id);
 
 		if(!keys.every(key => isPropertyOf(key, User))) {
@@ -91,6 +77,8 @@ export class UserService {
 		let key = keys[0];
 		
 		let value = +id[key];
+
+		console.log(value);
 
 		if(!validateId(value)){
 			throw new InvalidRequestError();
