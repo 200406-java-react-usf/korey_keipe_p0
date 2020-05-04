@@ -2,6 +2,7 @@ import { ResponseRepository } from '../repos/response-repo';
 import * as mockIndex from '..';
 import * as mockMapper from '../util/result-set-map';
 import { Response } from '../models/response';
+import { InternalServerError } from '../errors/errors';
 
 jest.mock('..', () => {
 	return {
@@ -101,5 +102,121 @@ describe('Response Repo', () => {
 		expect(result).toBeTruthy();
 		expect(result instanceof Response).toBe(true);
 
+	});
+
+	
+	test('should return a response when save succesfully persist', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockResponse = new Response (1, 'this is a test response body', 'A link goes here', 1);
+
+		// Act
+		let result = await sut.save(mockResponse);
+
+		// Assert
+		expect(result).toBeTruthy();
+
+	});
+
+	test('should return void when update is succesfully exectued by the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockResponse = new Response (1, 'this is a test response body', 'A link goes here', 1);
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		let result = await sut.update(mockResponse);
+
+		// Assert
+		expect(result).toBeTruthy();
+
+	});
+
+	test('should return void when deleteById is succesfully exectued by the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		let result = await sut.deleteById(1);
+
+		// Assert
+		expect(result).toBeTruthy();
+
+	});
+
+	test('should throw InternalServerError when save() is envoked but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockResponse = new Response (1, 'this is a test response body', 'A link goes here', 1);
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.save(mockResponse);
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
+
+	test('should throw InternalServerError when getAll() is envoked but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.getAll();
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
+
+	test('should throw InternalServerError when getById() is envoked but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockResponse = new Response (1, 'this is a test response body', 'A link goes here', 1);
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.getById(mockResponse.id);
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
 	});
 });
