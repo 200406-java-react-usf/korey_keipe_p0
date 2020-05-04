@@ -2,6 +2,7 @@ import { CommandRepository } from '../repos/command-repo';
 import * as mockIndex from '..';
 import * as mockMapper from '../util/result-set-map';
 import { Command } from '../models/command';
+import { InternalServerError } from '../errors/errors';
 
 jest.mock('..', () => {
 	return {
@@ -100,5 +101,120 @@ describe('Command Repo', ()=>{
 		expect(result).toBeTruthy();
 		expect(result instanceof Command).toBe(true);
 
+	});
+
+	test('should return a command when save succesfully persist', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockCommand = new Command (8, 'test', 1);
+
+		// Act
+		let result = await sut.save(mockCommand);
+
+		// Assert
+		expect(result).toBeTruthy();
+
+	});
+
+	test('should return void when update is succesfully exectued by the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockCommand = new Command (8, 'test', 1);
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		let result = await sut.update(mockCommand);
+
+		// Assert
+		expect(result).toBeTruthy();
+
+	});
+
+	test('should return void when deleteById is succesfully exectued by the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		let result = await sut.deleteById(1);
+
+		// Assert
+		expect(result).toBeTruthy();
+
+	});
+
+	test('should throw InternalServerError when save() is envoked but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockCommand = new Command (8, 'test', 1);
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.save(mockCommand);
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
+
+	test('should throw InternalServerError when getAll() is envoked but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.getAll();
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
+
+	test('should throw InternalServerError when getById() is envoked but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockCommand = new Command (8, 'test', 1);
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.getById(mockCommand.id);
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
 	});
 });
