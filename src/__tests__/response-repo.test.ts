@@ -84,4 +84,22 @@ describe('Response Repo', () => {
 		expect(mockConnect).toBeCalledTimes(1);
 
 	});
+
+	test('should return an response when getById recieves a specified response from the database',async ()=>{
+
+		// Arrange
+		expect.hasAssertions();
+
+		let mockResponse = new Response (1, 'this is a test response body', 'A link goes here', 1);
+		(mockMapper.mapResponseResultSet as jest.Mock).mockReturnValue(mockResponse);
+
+
+		// Act
+		let result = await sut.getById(1);
+
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result instanceof Response).toBe(true);
+
+	});
 });
