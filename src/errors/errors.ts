@@ -42,13 +42,6 @@ class AuthenticationError extends AppError{
 	}
 }
 
-class DataNotStoredError extends AppError{
-	constructor(reason?: string){
-		super(reason, 304);
-		super.setMessage('Error: The data has not been stored');
-	}
-}
-
 class InternalServerError extends AppError{
 	constructor(reason?: string){
 		super(reason, 500);
@@ -58,7 +51,6 @@ class InternalServerError extends AppError{
 
 export {
 	DataNotFoundError,
-	DataNotStoredError,
 	AuthenticationError,
 	InvalidRequestError,
 	ConflictError,
