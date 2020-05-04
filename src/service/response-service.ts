@@ -61,7 +61,7 @@ export class ResponseService {
 		return true;
 	}
 
-	async deleteResponseById(id: number): Promise<boolean> {
+	async deleteResponseById(id: any): Promise<boolean> {
 
 		let keys = Object.keys(id);
 

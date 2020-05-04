@@ -64,7 +64,7 @@ export class CommandService {
 
 	}
 
-	async deleteCommandById(id: number): Promise<boolean> {
+	async deleteCommandById(id: any): Promise<boolean> {
 
 		let keys = Object.keys(id);
 
