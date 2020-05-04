@@ -3,6 +3,7 @@ import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import Validator from '../util/validation';
 import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
+import validation from '../util/validation';
 
 jest.mock('../repos/user-repo', () => {
 
@@ -59,6 +60,59 @@ describe('userService', () => {
 		expect(result).toBeTruthy();
 		expect(result.length).toBe(3);
 		result.forEach(value => expect(value.password).toBeUndefined());
+	});
+
+	test('should throw a DataNotFoundError when getAllUsers fails to get any users from the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getAll = jest.fn().mockReturnValue([]);
+
+		// Act
+		try{
+			await sut.getAllUsers();
+		} catch (e) {
+		// Assert
+			expect(e instanceof DataNotFoundError).toBeTruthy();
+		}
+	});
+
+	test('should resolve a User when getUserById is given a valid id that is in the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+
+		validation.validateId = jest.fn().mockReturnValue(true);
+
+		mockRepo.getById = jest.fn().mockImplementation((id: number) => {
+			return new Promise<User>((resolve) => resolve(mockUsers[id - 1]));
+		});
+
+		// Act
+		let result = await sut.getUserById(1);
+
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result.id).toBe(1);
+		expect(result.password).toBeUndefined();
+
+	});
+
+	test('should throw InvalidRequestError when getUserById is provided an invalid id', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getById = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.getUserById(-1);
+		} catch (e) {
+
+			// Assert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+
 	});
 
 });
