@@ -84,4 +84,21 @@ describe('Command Repo', ()=>{
 		expect(mockConnect).toBeCalledTimes(1);
 
 	});
+
+	test('should return a command when getById recieves a specified command from the database',async ()=>{
+
+		// Arrange
+		expect.hasAssertions();
+
+		let mockCommand = new Command (1, 'test', 1);
+		(mockMapper.mapCommandResultSet as jest.Mock).mockReturnValue(mockCommand);
+
+		// Act
+		let result = await sut.getById(1);
+
+		// Assert
+		expect(result).toBeTruthy();
+		expect(result instanceof Command).toBe(true);
+
+	});
 });
