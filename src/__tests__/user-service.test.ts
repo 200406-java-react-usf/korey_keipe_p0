@@ -2,8 +2,9 @@ import { UserService } from '../service/user-service';
 import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import Validator from '../util/validation';
-import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
+import { DataNotFoundError, InvalidRequestError, ConflictError } from '../errors/errors';
 import validation from '../util/validation';
+import { resolve } from 'dns';
 
 jest.mock('../repos/user-repo', () => {
 
@@ -183,4 +184,44 @@ describe('userService', () => {
 
 	});
 
+	test('should return a newUser when saveUser is given a valid user object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(true);
+		mockRepo.getByUsername = jest.fn().mockReturnValue(true);
+		mockRepo.getByEmail = jest.fn().mockReturnValue(true);
+		mockRepo.save = jest.fn().mockImplementation((newUser: User) => {
+			return new Promise<User>((resolve) => {
+				mockUsers.push(newUser); 
+				resolve(newUser);
+			});
+		});
+
+		// Act
+		let result = await sut.saveUser(new User (4, 'TestUser', 'password', 'test@user.com'));
+
+		// Accert
+		expect(result).toBeTruthy();
+		expect(mockUsers.length).toBe(4);
+
+	});
+
+	test('should throw ConflicError when saveUser is envoked and username is not unique', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(true);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(false);
+		mockRepo.getByUsername = jest.fn().mockReturnValue(mockUsers[0]);
+		mockRepo.getByEmail = jest.fn().mockReturnValue({});
+
+		// Act
+		try {
+			await sut.saveUser(new User (4, 'KoreyKeipe', 'password', 'test@user.com'));
+		} catch (e) {
+		// Accert			
+			expect(e instanceof ConflictError).toBe(true);
+		}
+	});
 });
