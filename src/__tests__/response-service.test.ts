@@ -180,4 +180,71 @@ describe('responseService', () => {
 		}
 
 	});
+
+	test('should return a new response when saveResponse is given a valid response object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(true);
+		mockRepo.save = jest.fn().mockImplementation((newResponse: Response) => {
+			return new Promise<Response>((resolve) => {
+				mockResponses.push(newResponse); 
+				resolve(newResponse);
+			});
+		});
+
+		// Act
+		let result = await sut.saveResponse(new Response (8, 'This Test Response Passed', 'test@user.com', 1));
+
+		// Accert
+		expect(result).toBeTruthy();
+		expect(mockResponses.length).toBe(8);
+
+	});
+
+	test('should throw InvalidRequestError when saveUser is envoked and provided an invalid response', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.saveResponse(new Response (8, '', '', 1));
+		} catch (e) {
+		// Accert			
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
+	test('should return true when deleteById succesfully deletes a response', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateId = jest.fn().mockReturnValue(true);
+		validation.isPropertyOf = jest.fn().mockReturnValue(true);
+		mockRepo.deleteById = jest.fn().mockReturnValue(true);
+
+		// Act
+		let result = await sut.deleteResponseById({"id": 1});
+		console.log(result);
+		
+		// Accert
+		expect(result).toBe(true);
+
+	});
+
+	test('should return true when updateResponse is envoked and given a valid response object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.update = jest.fn().mockReturnValue(true);
+
+		// Act
+		let result = await sut.updateResponse(new Response (8, 'This Test Response Passed', 'test@user.com', 1));
+
+		// Accert
+		expect(result).toBe(true);
+
+	});
 });

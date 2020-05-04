@@ -179,26 +179,6 @@ describe('Response Repo', () => {
 		}
 	});
 
-	test('should throw InternalServerError when getAll() is envoked but query is unsuccesful', async () => {
-
-		// Arrange
-		expect.hasAssertions();
-		(mockConnect as jest.Mock).mockImplementation( () => {
-			return {
-				query: jest.fn().mockImplementation( () => { return false; }),
-				release: jest.fn()
-			};
-		});
-
-		// Act
-		try {
-			await sut.getAll();
-		} catch (e) {
-			// Assert
-			expect(e instanceof InternalServerError).toBe(true);
-		}
-	});
-
 	test('should throw InternalServerError when getById() is envoked but query is unsuccesful', async () => {
 
 		// Arrange

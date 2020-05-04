@@ -181,4 +181,71 @@ describe('commandService', () => {
 
 	});
 
+	test('should return a new command when saveCommand is given a valid user object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(true);
+		mockRepo.save = jest.fn().mockImplementation((newCommand: Command) => {
+			return new Promise<Command>((resolve) => {
+				mockCommands.push(newCommand); 
+				resolve(newCommand);
+			});
+		});
+
+		// Act
+		let result = await sut.saveCommand(new Command (8, 'test', 1));
+
+		// Accert
+		expect(result).toBeTruthy();
+		expect(mockCommands.length).toBe(8);
+
+	});
+
+	test('should throw InvalidRequestError when saveCommand is envoked and provided an invalid command', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.saveCommand(new Command (8, '', 1));
+		} catch (e) {
+		// Accert			
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
+	test('should return true when deleteById succesfully deletes a command', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateId = jest.fn().mockReturnValue(true);
+		validation.isPropertyOf = jest.fn().mockReturnValue(true);
+		mockRepo.deleteById = jest.fn().mockReturnValue(true);
+
+		// Act
+		let result = await sut.deleteCommandById({"id": 1});
+		console.log(result);
+		
+		// Accert
+		expect(result).toBe(true);
+
+	});
+
+	test('should return true when updateCommand is envoked and given a valid command object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.update = jest.fn().mockReturnValue(true);
+
+		// Act
+		let result = await sut.updateCommand(new Command (1, 'Success', 1));
+
+		// Accert
+		expect(result).toBe(true);
+
+	});
+
 });
