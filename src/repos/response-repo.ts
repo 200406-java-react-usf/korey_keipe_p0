@@ -1,10 +1,9 @@
 import { Response } from '../models/response';
 import { CrudRepository } from './crud-repo';
-import {
-	InternalServerError,
-} from '../errors/errors';
 import { PoolClient } from 'pg';
+import { InternalServerError } from '../errors/errors';
 import { connectionPool } from '..';
+import { mapResponseResultSet } from '../util/result-set-map';
 
 export class ResponseRepository implements CrudRepository<Response> {
 
@@ -42,7 +41,7 @@ export class ResponseRepository implements CrudRepository<Response> {
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} where id = $1`;
 			let rs = await client.query(sql, [+id]);	
-			return rs.rows[0];
+			return mapResponseResultSet(rs.rows[0]);
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -74,8 +73,8 @@ export class ResponseRepository implements CrudRepository<Response> {
 		try {
 			client = await connectionPool.connect();
 			let sql = `update Responses set body = $2, link = $3, commandId = $4 where id = $1`;
-			let rs = await client.query(sql , [+updatedResponse.id, updatedResponse.body, updatedResponse.link, +updatedResponse.commandId]);
-			return rs.rows[0];
+			await client.query(sql , [+updatedResponse.id, updatedResponse.body, updatedResponse.link, +updatedResponse.commandId]);
+			return true;
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -90,8 +89,8 @@ export class ResponseRepository implements CrudRepository<Response> {
 		try {			
 			client = await connectionPool.connect();
 			let sql = `delete from Responses where id = $1`;
-			let rs = await client.query(sql , [id]);			
-			return rs.rows[0];
+			await client.query(sql , [id]);			
+			return true;
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
