@@ -1,11 +1,9 @@
 import { Command } from '../models/command';
 import { CrudRepository } from '../repos/crud-repo';
-import {
-	InternalServerError,
-} from '../errors/errors';
 import { PoolClient} from 'pg';
+import { InternalServerError } from '../errors/errors';
 import { connectionPool } from '..';
-
+import { mapCommandResultSet } from '../util/result-set-map';
 
 export class CommandRepository implements CrudRepository<Command> {
 
@@ -42,7 +40,7 @@ export class CommandRepository implements CrudRepository<Command> {
 			client = await connectionPool.connect();
 			let sql = `${this.baseQuery} where id = $1`;
 			let rs = await client.query(sql, [id]);
-			return rs.rows[0];
+			return mapCommandResultSet(rs.rows[0]);
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -74,8 +72,8 @@ export class CommandRepository implements CrudRepository<Command> {
 		try {
 			client = await connectionPool.connect();
 			let sql = `update Commands set keyword = $2, userId = $3 where id = $1`;
-			let rs = await client.query(sql, [+updatedCommand.id, updatedCommand.keyword, +updatedCommand.userId]);
-			return rs.rows[0];
+			await client.query(sql, [+updatedCommand.id, updatedCommand.keyword, +updatedCommand.userId]);
+			return true;
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
@@ -91,8 +89,8 @@ export class CommandRepository implements CrudRepository<Command> {
 		try {			
 			client = await connectionPool.connect();
 			let sql = `delete from Commands where id = $1`;
-			let rs = await client.query(sql , [id]);			
-			return rs.rows[0];
+			await client.query(sql , [id]);			
+			return true;
 		} catch (e) {
 			throw new InternalServerError();
 		} finally {
