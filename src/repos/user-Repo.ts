@@ -16,6 +16,9 @@ export class UserRepository implements CrudRepository<User> {
 		from App_Users
 	`;
 
+	/**
+	 * Retreive all users from the database. 
+	 */
 	async getAll(): Promise<User[]> {
 
 		let client: PoolClient;
@@ -31,6 +34,10 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
+	/**
+	 * retrieve user by specific id from database 
+	 * @param {string} id - unique id of desired user.
+	 */
 	async getById(id: number): Promise<User>{
 		
 		let client: PoolClient;
@@ -46,6 +53,10 @@ export class UserRepository implements CrudRepository<User> {
 		}	
 	}
 
+	/**
+	 * retrieve user by specific id from database 
+	 * @param {string} id - unique id of desired user.
+	 */
 	async save(newUser: User): Promise<User>{
 
 		let client: PoolClient;		
