@@ -166,7 +166,7 @@ describe('userService', () => {
 
 	});
 
-	test('should throw DataNotFoundError when getUserById is given a valid id that is not in the database)', async () => {
+	test('should throw DataNotFoundError when getUserById is given a valid id that is not in the database', async () => {
 
 		// Arrange
 		expect.hasAssertions();
@@ -273,5 +273,23 @@ describe('userService', () => {
 		// Accert
 		expect(result).toBe(true);
 
+	});
+
+	test('should throw InvalidRequestError when updateUser is envoked and given an invalid user object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.validateObj = jest.fn().mockReturnValue(false);
+		mockRepo.update = jest.fn().mockReturnValue(true);
+		mockRepo.getByEmail = jest.fn().mockReturnValue(true);
+		mockRepo.getByUsername = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.updateUser(new User (1, '', '', 'kkeipe@gmail.com'));
+		} catch (e) {
+		// Accert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
 	});
 });

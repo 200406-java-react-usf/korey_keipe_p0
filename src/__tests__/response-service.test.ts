@@ -247,4 +247,20 @@ describe('responseService', () => {
 		expect(result).toBe(true);
 
 	});
+
+	test('should throw InvalidRequestError when updateResponse is envoked and given an invalid response object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.validateObj = jest.fn().mockReturnValue(false);
+		mockRepo.update = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.updateResponse(new Response (1, '', '', 1));
+		} catch (e) {
+		// Accert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
 });

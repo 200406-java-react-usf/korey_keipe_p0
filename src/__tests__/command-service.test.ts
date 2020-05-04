@@ -248,4 +248,20 @@ describe('commandService', () => {
 
 	});
 
+	test('should throw InvalidRequestError when updateCommand is envoked and given an invalid command object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateObj = jest.fn().mockReturnValue(false);
+		mockRepo.update = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.updateCommand(new Command (1, '', 1));
+		} catch (e) {
+		// Accert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
 });
