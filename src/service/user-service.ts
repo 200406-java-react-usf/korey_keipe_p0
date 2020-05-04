@@ -10,6 +10,7 @@ import {validateId,
 	isPropertyOf,
 	vaildateEmptyObj
 } from '../util/validation';
+import { mapCommandResultSet } from '../util/result-set-map';
 
 export class UserService {
 
@@ -25,7 +26,7 @@ export class UserService {
 			throw new DataNotFoundError('No users found in the database');
 		}
 
-		return users;
+		return users.map(this.passwordHide);
 	}
 
 	async getUserById(id): Promise<User> {
