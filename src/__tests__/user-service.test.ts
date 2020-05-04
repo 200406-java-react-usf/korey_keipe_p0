@@ -4,7 +4,6 @@ import { User } from '../models/user';
 import Validator from '../util/validation';
 import { DataNotFoundError, InvalidRequestError, ConflictError } from '../errors/errors';
 import validation from '../util/validation';
-import { resolve } from 'dns';
 
 jest.mock('../repos/user-repo', () => {
 
@@ -255,6 +254,22 @@ describe('userService', () => {
 		let result = await sut.deleteUserById({"id": 1});
 		console.log(result);
 		
+		// Accert
+		expect(result).toBe(true);
+
+	});
+
+	test('should return true when updateUser is envoked and given a valid user object', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getByUsername = jest.fn().mockReturnValue(true);
+		mockRepo.getByEmail = jest.fn().mockReturnValue({});
+		mockRepo.update = jest.fn().mockReturnValue(true);
+
+		// Act
+		let result = await sut.updateUser(new User (1, 'KKeipe', 'password', 'kkeipe@gmail.com'));
+
 		// Accert
 		expect(result).toBe(true);
 
