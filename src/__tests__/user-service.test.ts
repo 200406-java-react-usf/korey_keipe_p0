@@ -98,7 +98,7 @@ describe('userService', () => {
 
 	});
 
-	test('should throw InvalidRequestError when getUserById is provided an invalid id', async () => {
+	test('should throw InvalidRequestError when getUserById is provided a negative id value', async () => {
 
 		// Arrange
 		expect.hasAssertions();
@@ -114,5 +114,23 @@ describe('userService', () => {
 		}
 
 	});
+
+	test('should throw InvalidRequestError when getUserById is given a of zero)', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		mockRepo.getById = jest.fn().mockReturnValue(false);
+
+		// Act
+		try {
+			await sut.getUserById(0);
+		} catch (e) {
+
+			// Assert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+
+	});
+
 
 });
