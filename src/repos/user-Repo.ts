@@ -155,6 +155,11 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
+	/**
+	 * retrieve a user by a provide key value pair 
+	 * @param {string} key - parameter of a user object.
+	 * @param {string} val - value of a parameter (key).
+	 */
 	async getUserByUniqueKey(key: string, val: string): Promise<User> {
 
 		let client: PoolClient;

@@ -1,6 +1,6 @@
 import { UserService } from '../service/user-service';
 import { User } from '../models/user';
-import { DataNotFoundError, InvalidRequestError, ConflictError } from '../errors/errors';
+import { DataNotFoundError, InvalidRequestError, ConflictError, AuthenticationError } from '../errors/errors';
 import validation from '../util/validation';
 
 jest.mock('../repos/user-repo', () => {
@@ -277,7 +277,7 @@ describe('userService', () => {
 
 		// Arrange
 		expect.hasAssertions();
-		mockRepo.validateObj = jest.fn().mockReturnValue(false);
+		validation.validateObj = jest.fn().mockReturnValue(false);
 		mockRepo.update = jest.fn().mockReturnValue(true);
 		mockRepo.getByEmail = jest.fn().mockReturnValue(true);
 		mockRepo.getByUsername = jest.fn().mockReturnValue(true);
@@ -290,4 +290,97 @@ describe('userService', () => {
 			expect(e instanceof InvalidRequestError).toBe(true);
 		}
 	});
+
+	test('should throw InvalidRequestError when authentication is envoked and given an invalid username', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateString = jest.fn().mockReturnValue(false);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(true);
+		mockRepo.getByUsername = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.authentication('','password');
+		} catch (e) {
+		// Accert
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
+	test('should throw AuthenticationError when authentication is envoked and given an invalid username', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.validateString = jest.fn().mockReturnValue(true);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(false);
+		mockRepo.getByUsername = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.authentication('test','password');
+		} catch (e) {
+		// Accert
+			expect(e instanceof AuthenticationError).toBe(true);
+		}
+	});
+
+	test('should throw InvalidRequestError when getUserByUniqueKey is envoked and isPropertyOf returns false', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.isPropertyOf = jest.fn().mockReturnValue(false);
+		validation.validateString = jest.fn().mockReturnValue(true);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(true);
+		mockRepo.getUserByUniqueKey = jest.fn().mockReturnValue(true);
+		mockRepo.getUserById = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.getUserByUniqueKey({"name":"test"});
+		} catch (e) {
+		// Accert		
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
+	test('should throw InvalidRequestError when getUserByUniqueKey is envoked and key is an invalid string', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.isPropertyOf = jest.fn().mockReturnValue(true);
+		validation.validateString = jest.fn().mockReturnValue(false);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(true);
+		mockRepo.getUserByUniqueKey = jest.fn().mockReturnValue(true);
+		mockRepo.getUserById = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.getUserByUniqueKey({"name":"test"});
+		} catch (e) {
+		// Accert		
+			expect(e instanceof InvalidRequestError).toBe(true);
+		}
+	});
+
+	test('should throw DataNotFoundError when getUserByUniqueKey is envoked gets an empty object from the database', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		validation.isPropertyOf = jest.fn().mockReturnValue(true);
+		validation.validateString = jest.fn().mockReturnValue(true);
+		validation.vaildateEmptyObj = jest.fn().mockReturnValue(false);
+		mockRepo.getUserByUniqueKey = jest.fn().mockReturnValue(true);
+
+		// Act
+		try{
+			await sut.getUserByUniqueKey({username:'test'});
+		} catch (e) {
+		// Accert
+			console.log(e);
+				
+			expect(e instanceof DataNotFoundError).toBe(true);
+		}
+	});
+
 });

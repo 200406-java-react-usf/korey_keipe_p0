@@ -130,25 +130,17 @@ export class UserService {
 
 	async getUserByUniqueKey(queryObj: any): Promise<User> {
 
-
 		let queryKeys = Object.keys(queryObj);
 
 		if(!queryKeys.every(key => isPropertyOf(key, User))) {
-			throw new InvalidRequestError();
+			throw new InvalidRequestError('Invalid Property');
 		}
 
-		//support single param searches...can we do better?
 		let key = queryKeys[0];
 		let val = queryKeys[key];
 
-		//reuse the logic
 		if (key === 'id') {
 			return await this.getUserById(+val);
-		}
-
-		//is key valid?
-		if(!validateString(val)){
-			throw new InvalidRequestError();
 		}
 
 		let user = await this.userRepo.getUserByUniqueKey(key, val);
