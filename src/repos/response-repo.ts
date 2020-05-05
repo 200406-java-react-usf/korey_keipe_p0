@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Response } from '../models/response';
 import { CrudRepository } from './crud-repo';
 import { PoolClient } from 'pg';
@@ -16,6 +17,9 @@ export class ResponseRepository implements CrudRepository<Response> {
 			from Responses	
 	`;
 
+	/**
+	 * retreive and array of responses from the database 
+	 */
 	async getAll(): Promise<Response[]>{
 
 		let client: PoolClient;
@@ -33,6 +37,10 @@ export class ResponseRepository implements CrudRepository<Response> {
 
 	}
 
+	/**
+	 * retrieve a response with a specified Id 
+	 * @param {string} id - unique identifier of a response object.
+	 */
 	async getById(id: number): Promise<Response>{
 		
 		let client: PoolClient;
@@ -49,6 +57,10 @@ export class ResponseRepository implements CrudRepository<Response> {
 		}
 	}
 
+	/**
+	 * persist a new response to the database 
+	 * @param {string} newResponse - response object.
+	 */
 	async save(newResponse: Response): Promise<Response>{
 
 		let client: PoolClient;
@@ -66,6 +78,10 @@ export class ResponseRepository implements CrudRepository<Response> {
 		}
 	}
 
+	/**
+	 * update an excisting response when provided an updated user object 
+	 * @param {string} updatedResponse - response object.
+	 */
 	async update(updatedResponse: Response): Promise<boolean>{
 		
 		let client: PoolClient;
@@ -82,6 +98,10 @@ export class ResponseRepository implements CrudRepository<Response> {
 		}
 	}
 
+	/**
+	 * remove a response from the database give a specific id 
+	 * @param {string} id - unique identifier of a response.
+	 */
 	async deleteById(id: number): Promise<boolean>{
 
 		let client: PoolClient;
