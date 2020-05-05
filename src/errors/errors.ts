@@ -49,10 +49,18 @@ class InternalServerError extends AppError{
 	}
 }
 
+class AuthorizationError extends AppError {
+	constructor(reason?: string){
+		super(reason, 500);
+		super.setMessage('You do not have permission to access this content');
+	}
+}
+
 export {
 	DataNotFoundError,
 	AuthenticationError,
 	InvalidRequestError,
 	ConflictError,
 	InternalServerError,
+	AuthorizationError
 };
