@@ -1,7 +1,5 @@
 import { ResponseService } from '../service/response-service';
-import { ResponseRepository } from '../repos/response-repo';
 import { Response } from '../models/response';
-import Validator from '../util/validation';
 import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
 import validation from '../util/validation';
 

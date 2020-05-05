@@ -1,7 +1,5 @@
 import { CommandService } from '../service/command-service';
-import { CommandRepository } from '../repos/command-repo';
 import { Command } from '../models/command';
-import Validator from '../util/validation';
 import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
 import validation from '../util/validation';
 

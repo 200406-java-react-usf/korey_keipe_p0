@@ -1,7 +1,5 @@
 import { UserService } from '../service/user-service';
-import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
-import Validator from '../util/validation';
 import { DataNotFoundError, InvalidRequestError, ConflictError } from '../errors/errors';
 import validation from '../util/validation';
 
