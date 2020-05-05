@@ -15,6 +15,9 @@ export class CommandRepository implements CrudRepository<Command> {
 		from Commands	
 	`;
 
+	/**
+	 * retreive and array of commands from the database 
+	 */
 	async getAll(): Promise<Command[]>{
 			
 		let client: PoolClient;
@@ -32,6 +35,10 @@ export class CommandRepository implements CrudRepository<Command> {
 				
 	}
 
+	/**
+	 * retrieve a command with a specified Id 
+	 * @param {string} id - unique identifier of a command object.
+	 */
 	async getById(id: number): Promise<Command>{
 		
 		let client: PoolClient;
@@ -48,6 +55,10 @@ export class CommandRepository implements CrudRepository<Command> {
 		}
 	}
 
+	/**
+	 * persist a new command to the database 
+	 * @param {string} newCommand - command object.
+	 */
 	async save(newCommand: Command): Promise<Command>{
 
 		let client: PoolClient;
@@ -65,6 +76,10 @@ export class CommandRepository implements CrudRepository<Command> {
 		}
 	}
 
+	/**
+	 * update an excisting command when provided an updated user object 
+	 * @param {string} updatedCommand - command object.
+	 */
 	async update(updatedCommand: Command): Promise<boolean>{
 	
 		let client: PoolClient;
@@ -82,6 +97,10 @@ export class CommandRepository implements CrudRepository<Command> {
 
 	}
 
+	/**
+	 * remove a command from the database give a specific id 
+	 * @param {string} id - unique identifier of a command.
+	 */
 	async deleteById(id: number): Promise<boolean>{
 
 		let client: PoolClient;
