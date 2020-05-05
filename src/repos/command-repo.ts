@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Command } from '../models/command';
 import { CrudRepository } from '../repos/crud-repo';
 import { PoolClient} from 'pg';
