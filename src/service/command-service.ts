@@ -45,10 +45,6 @@ export class CommandService {
 
 		const storedCommand = await this.commandRepo.save(newCommand);
 
-		if (!validateObj(storedCommand)){
-			throw new DataNotStoredError('New command was not saved');
-		}
-
 		return storedCommand;
 
 	}

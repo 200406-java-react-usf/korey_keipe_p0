@@ -44,10 +44,6 @@ export class ResponseService {
 
 		const storedResponse = await this.responseRepo.save(newResponse);
 
-		if (!validateObj(storedResponse)){
-			throw new DataNotStoredError('New command was not saved');
-		}
-
 		return storedResponse;
 
 	}
