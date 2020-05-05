@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { ResponseRepository } from '../repos/response-repo';
-import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
+import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
 import { Response } from '../models/response';
 import { validateId, validateObj, isPropertyOf } from '../util/validation';
 

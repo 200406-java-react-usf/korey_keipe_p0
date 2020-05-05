@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { CommandRepository } from '../repos/command-repo';
-import { DataNotFoundError, InvalidRequestError, DataNotStoredError } from '../errors/errors';
+import { DataNotFoundError, InvalidRequestError } from '../errors/errors';
 import { validateId, validateObj, isPropertyOf } from '../util/validation';
 import { Command } from '../models/command';
 
