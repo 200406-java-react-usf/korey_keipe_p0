@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import { DataNotFoundError,
@@ -6,11 +7,9 @@ import { DataNotFoundError,
 } from '../errors/errors';
 import {validateId,
 	validateObj,
-	validateString,
 	isPropertyOf,
 	vaildateEmptyObj
 } from '../util/validation';
-import { mapCommandResultSet } from '../util/result-set-map';
 
 export class UserService {
 
