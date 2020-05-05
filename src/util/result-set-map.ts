@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { UserSchema, CommandSchema, ResponseSchema } from '../util/schema';
 import { User } from '../models/user';
 import { Command } from '../models/command';
