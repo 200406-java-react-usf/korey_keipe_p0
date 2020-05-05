@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { CrudRepository } from './crud-repo';
 import { User } from '../models/user';
 import { InternalServerError } from '../errors/errors';
@@ -74,14 +75,18 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
-	async update(updateUser: User): Promise<boolean>{
+	/**
+	 * update elements of a user when provided an updated user object 
+	 * @param {string} updatedUser - User object with updated perameters.
+	 */
+	async update(updatedUser: User): Promise<boolean>{
 
 		let client: PoolClient;
 
 		try {
 			client = await connectionPool.connect();
 			let sql = `update App_Users set username = $2, password = $3, email = $4 where id = $1`;
-			await client.query(sql , [+updateUser.id, updateUser.username, updateUser.password, updateUser.email]);
+			await client.query(sql , [+updatedUser.id, updatedUser.username, updatedUser.password, updatedUser.email]);
 			return true;
 		} catch (e) {
 			throw new InternalServerError();
@@ -90,6 +95,10 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
+	/**
+	 * delete a user when provided a valid user id
+	 * @param {string} id - unique id of desired user.
+	 */
 	async deleteById(id: number): Promise<boolean>{
 
 		let client: PoolClient;
@@ -106,6 +115,10 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
+	/**
+	 * retrieve a user when provided a specific username 
+	 * @param {string} username - parameter of a user object.
+	 */
 	async getByUsername(username: string): Promise<User> {
 
 		let client: PoolClient;
@@ -122,6 +135,10 @@ export class UserRepository implements CrudRepository<User> {
 		}
 	}
 
+	/**
+	 * retrieve a user when provided a specific email 
+	 * @param {string} email - parameter of a user object.
+	 */
 	async getByEmail(email: string): Promise<User> {
 
 		let client: PoolClient;
