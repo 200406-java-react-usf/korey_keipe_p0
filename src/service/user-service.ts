@@ -3,12 +3,14 @@ import { UserRepository } from '../repos/user-Repo';
 import { User } from '../models/user';
 import { DataNotFoundError,
 	InvalidRequestError,
-	ConflictError
+	ConflictError,
+	AuthenticationError
 } from '../errors/errors';
 import {validateId,
 	validateObj,
 	isPropertyOf,
-	vaildateEmptyObj
+	vaildateEmptyObj,
+	validateString
 } from '../util/validation';
 
 export class UserService {
@@ -105,6 +107,57 @@ export class UserService {
 		await this.userRepo.update(updateUser);
 
 		return true;
+
+	}
+
+	async authentication(username: string, password: string): Promise<User> {
+
+		if (!validateString(username, password)) {
+			throw new InvalidRequestError();
+		}
+
+		let authUser: User;
+			
+		authUser = await this.userRepo.getByUsername(username);
+			
+		if (vaildateEmptyObj(authUser)) {
+			throw new AuthenticationError('Bad credentials provided.');
+		}
+
+		return this.passwordHide(authUser);
+
+	}
+
+	async getUserByUniqueKey(queryObj: any): Promise<User> {
+
+
+		let queryKeys = Object.keys(queryObj);
+
+		if(!queryKeys.every(key => isPropertyOf(key, User))) {
+			throw new InvalidRequestError();
+		}
+
+		//support single param searches...can we do better?
+		let key = queryKeys[0];
+		let val = queryKeys[key];
+
+		//reuse the logic
+		if (key === 'id') {
+			return await this.getUserById(+val);
+		}
+
+		//is key valid?
+		if(!validateString(val)){
+			throw new InvalidRequestError();
+		}
+
+		let user = await this.userRepo.getUserByUniqueKey(key, val);
+
+		if (vaildateEmptyObj(user)) {
+			throw new DataNotFoundError();
+		}
+
+		return this.passwordHide(user);
 
 	}
 

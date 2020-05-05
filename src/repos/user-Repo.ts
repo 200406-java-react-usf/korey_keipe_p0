@@ -154,5 +154,21 @@ export class UserRepository implements CrudRepository<User> {
 			client && client.release();
 		}
 	}
+
+	async getUserByUniqueKey(key: string, val: string): Promise<User> {
+
+		let client: PoolClient;
+
+		try{
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} where au.${key} = $1`;
+			let rs = await client.query(sql, [val]);
+			return mapUserResultSet(rs.rows[0]);
+		} catch (e) {
+			throw new InternalServerError();  
+		} finally {
+			client && client.release();
+		} 
+	}
 	
 }
