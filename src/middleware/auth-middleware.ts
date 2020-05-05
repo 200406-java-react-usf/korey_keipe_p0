@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Request, Response } from "express";
 import { AuthenticationError, AuthorizationError } from "../errors/errors";
 
