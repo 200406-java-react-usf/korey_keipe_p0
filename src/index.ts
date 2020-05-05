@@ -4,6 +4,9 @@ import { ResponseRouter } from './routes/response-router';
 import { CommandRouter } from './routes/command-router';
 import dotenv from 'dotenv';
 import { Pool } from 'pg';
+import { AuthRouter } from './routes/auth-router';
+import { sessionMiddleware } from './middleware/session-middleware';
+import { corsFilter } from './middleware/cors-filter';
 
 dotenv.config();
 
@@ -19,10 +22,13 @@ export const connectionPool: Pool = new Pool({
 const app = express();
 const port = 8080;
 
+app.use(sessionMiddleware);
+app.use(corsFilter);
 app.use('/', express.json());
 app.use('/users', UserRouter);
 app.use('/commands', CommandRouter);
 app.use('/responses', ResponseRouter);
+app.use('/auth', AuthRouter);
 
 
 // Connect to Server
