@@ -18,7 +18,9 @@ export class UserService {
 	constructor(private userRepo: UserRepository) {
 		this.userRepo = userRepo;
 	}
-
+	/**
+	 *  Returns an array of all users
+	 */
 	async getAllUsers(): Promise<User[]> {
 		
 		let users = await this.userRepo.getAll();
@@ -29,7 +31,10 @@ export class UserService {
 
 		return users.map(this.passwordHide);
 	}
-
+	/**
+	 * Returns a user object when given a valid user id
+	 * @param id unique identifier of a user
+	 */
 	async getUserById(id): Promise<User> {
 
 		if(!validateId(id)){
@@ -45,7 +50,10 @@ export class UserService {
 		return this.passwordHide(user);
 
 	}
-
+	/**
+	 * returns a new user that has been saved to the database
+	 * @param newUser new user object
+	 */
 	async saveUser(newUser: User): Promise<User>{
 	
 
@@ -64,7 +72,10 @@ export class UserService {
 
 		return this.passwordHide(storedUser);
 	}	
-
+	/**
+	 * returns true when a user is succesfully deleted
+	 * @param id unique identifier of a user
+	 */
 	async deleteUserById(id: any): Promise<boolean> {
 	
 		let keys = Object.keys(id);
@@ -86,7 +97,10 @@ export class UserService {
 		return true;
 
 	}
-
+	/**
+	 * returns true when a new user is succesfully update
+	 * @param updateUser updated user object
+	 */
 	async updateUser(updateUser: User): Promise<boolean> {
 
 		if (!validateObj(updateUser)) {
@@ -109,7 +123,11 @@ export class UserService {
 		return true;
 
 	}
-
+	/**
+	 * verify authentication of user to grant admin privliges
+	 * @param username parameter of user object
+	 * @param password parameter of user object
+	 */
 	async authentication(username: string, password: string): Promise<User> {
 
 		if (!validateString(username, password)) {
@@ -127,7 +145,10 @@ export class UserService {
 		return this.passwordHide(authUser);
 
 	}
-
+	/**
+	 * retrieve a user object based on a key value pair
+	 * @param queryObj key value pair
+	 */
 	async getUserByUniqueKey(queryObj: any): Promise<User> {
 
 		let queryKeys = Object.keys(queryObj);
@@ -152,7 +173,10 @@ export class UserService {
 		return this.passwordHide(user);
 
 	}
-
+	/**
+	 * hide password from user object
+	 * @param user user object
+	 */
 	private passwordHide(user: User){
 		let userCopy = {...user};
 		delete userCopy.password;
