@@ -9,7 +9,9 @@ export class ResponseService {
 	constructor(private responseRepo: ResponseRepository) {
 		this.responseRepo = responseRepo;
 	}
-
+	/**
+	 *  Returns an array of all responses
+	 */
 	async getAllResponses(): Promise<Response[]> {
 
 		let responses = await this.responseRepo.getAll();
@@ -21,7 +23,10 @@ export class ResponseService {
 		return responses;
 
 	}
-
+	/**
+	 * Returns a response object when given a valid response id
+	 * @param id unique identifier of a response
+	 */
 	async getResponseById(id: number): Promise<Response> {
 
 		if (!validateId(id)){
@@ -35,7 +40,10 @@ export class ResponseService {
 		}
 		return response;
 	}
-
+	/**
+	 * returns a new response that has been saved to the database
+	 * @param newResponse new response object
+	 */
 	async saveResponse(newResponse: Response): Promise<Response> {
 
 		if (!validateObj(newResponse, 'id')) {
@@ -47,7 +55,10 @@ export class ResponseService {
 		return storedResponse;
 
 	}
-
+	/**
+	 * returns true when a new response is succesfully update
+	 * @param updateResponse updated response object
+	 */
 	async updateResponse(updateResponse: Response): Promise<boolean> {
 
 		if (!validateObj(updateResponse)) {
@@ -57,7 +68,10 @@ export class ResponseService {
 
 		return true;
 	}
-
+	/**
+	 * returns true when a response is succesfully deleted
+	 * @param id unique identifier of a response
+	 */
 	async deleteResponseById(id: any): Promise<boolean> {
 
 		let keys = Object.keys(id);
