@@ -8,7 +8,7 @@ const userService = AppConfig.userService;
 
 AuthRouter.get('', (req, res) => {
 	delete req.session.principal;
-	res.status(204).send();
+	res.status(202).send();
 });
 
 AuthRouter.post('', async (req, res) => {

@@ -1,5 +1,6 @@
 import express from 'express';
 import Appconfig from '../config/app';
+import { adminGuard } from '../middleware/auth-middleware';
 
 export const ResponseRouter = express.Router();
 
@@ -24,7 +25,7 @@ ResponseRouter.get('/:id', async (req, res) => {
 	}
 });
 
-ResponseRouter.post('', async (req, res) => {
+ResponseRouter.post('', adminGuard, async (req, res) => {
 	
 	try{
 		let result = await responseService.saveResponse(req.body);
@@ -34,7 +35,7 @@ ResponseRouter.post('', async (req, res) => {
 	}
 });
 
-ResponseRouter.put('', async (req, res) => {
+ResponseRouter.put('', adminGuard, async (req, res) => {
 	
 	try{
 		let result = await responseService.updateResponse(req.body);
@@ -44,7 +45,7 @@ ResponseRouter.put('', async (req, res) => {
 	}
 });
 
-ResponseRouter.delete('', async (req, res) => {
+ResponseRouter.delete('', adminGuard, async (req, res) => {
 	
 	try{
 		let result = await responseService.deleteResponseById(req.body);

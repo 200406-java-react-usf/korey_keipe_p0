@@ -8,7 +8,7 @@ export const UserRouter = express.Router();
 
 const userService = Appconfig.userService;
 
-UserRouter.get('/', adminGuard, async (req,resp) => {
+UserRouter.get('/', async (req,resp) => {
 	try {
 
 		let reqURL = url.parse(req.url, true);
@@ -45,7 +45,7 @@ UserRouter.get('/:id', async (req,res)=>{
 	}
 });
 
-UserRouter.post('', async (req, res) => {
+UserRouter.post('', adminGuard, async (req, res) => {
 
 	try{
 		let payload = await userService.saveUser(req.body);
@@ -65,7 +65,7 @@ UserRouter.delete('', adminGuard, async (req, res) => {
 	}
 });
 
-UserRouter.put('', async (req, res) => {
+UserRouter.put('', adminGuard, async (req, res) => {
 
 	try{
 		let payload = await userService.updateUser(req.body);

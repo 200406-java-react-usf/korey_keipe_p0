@@ -1,5 +1,6 @@
 import express from 'express';
 import Appconfig from '../config/app';
+import { adminGuard } from '../middleware/auth-middleware';
 
 export const CommandRouter = express.Router();
 
@@ -24,7 +25,7 @@ CommandRouter.get('/:id', async (req, res) => {
 	}
 });
 
-CommandRouter.post('', async (req, res) => {
+CommandRouter.post('', adminGuard, async (req, res) => {
 	
 	try{
 		let result = await commandService.saveCommand(req.body);
@@ -34,7 +35,7 @@ CommandRouter.post('', async (req, res) => {
 	}
 });
 
-CommandRouter.put('', async (req, res) => {
+CommandRouter.put('', adminGuard, async (req, res) => {
 	
 	try{
 		let result = await commandService.updateCommand(req.body);
@@ -44,7 +45,7 @@ CommandRouter.put('', async (req, res) => {
 	}
 });
 
-CommandRouter.delete('', async (req, res) => {
+CommandRouter.delete('', adminGuard, async (req, res) => {
 	
 	try{
 		let result = await commandService.deleteCommandById(req.body);
