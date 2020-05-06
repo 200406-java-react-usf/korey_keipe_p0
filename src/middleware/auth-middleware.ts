@@ -2,6 +2,12 @@
 import { Request, Response } from "express";
 import { AuthenticationError, AuthorizationError } from "../errors/errors";
 
+/**
+ * adds authorization protection to endpoints when used as middleware
+ * @param req request object
+ * @param res response object
+ * @param next next
+ */
 export const adminGuard = (req: Request, res: Response, next) => {
 
 	if (!req.session.principal) {
