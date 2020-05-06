@@ -9,7 +9,9 @@ export class CommandService {
 	constructor(private commandRepo: CommandRepository) {
 		this.commandRepo = commandRepo;
 	}
-
+	/**
+	 *  Returns an array of all commands
+	 */
 	async getAllCommands(): Promise<Command[]>{
 
 		let commands = await this.commandRepo.getAll();
@@ -21,7 +23,10 @@ export class CommandService {
 		return commands;
 
 	}
-
+	/**
+	 * Returns a command object when given a valid command id
+	 * @param id unique identifier of a command 
+	 */
 	async getCommandById(id: number): Promise<Command> {
 
 		if(!validateId(id)) {
@@ -36,7 +41,10 @@ export class CommandService {
 
 		return command;
 	}
-
+	/**
+	 * returns a new command that has been saved to the database
+	 * @param newCommand new command object
+	 */
 	async saveCommand(newCommand: Command): Promise<Command> {
 
 		if (!validateObj(newCommand, 'id')) {
@@ -48,7 +56,10 @@ export class CommandService {
 		return storedCommand;
 
 	}
-
+	/**
+	 * returns true when a new command is succesfully update
+	 * @param updateCommand updated command object
+	 */
 	async updateCommand(updateCommand: Command): Promise<boolean> {
 
 		if (!validateObj(updateCommand)) {
@@ -60,7 +71,10 @@ export class CommandService {
 		return true;
 
 	}
-
+	/**
+	 * returns true when a command is succesfully deleted
+	 * @param id unique identifier of a command
+	 */
 	async deleteCommandById(id: any): Promise<boolean> {
 
 		let keys = Object.keys(id);
